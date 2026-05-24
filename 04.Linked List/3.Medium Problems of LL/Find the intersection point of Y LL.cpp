@@ -48,7 +48,7 @@ node* intersectionPresent(node* head1,node* head2) {
 // Move both pointers, each pointing two lists, ahead simultaneously if both do not collide.
 
 
-// TC : O(2*max(l1, l2)) + O(abs(l1 - l2)) + O(min(l1, l2))
+// TC : O(l1 + l2) + O(abs(l1 - l2)) + O(min(l1, l2))
 // SC : O(1)
 
 int getDifference(node* head1,node* head2) {
