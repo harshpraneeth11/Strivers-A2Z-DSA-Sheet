@@ -41,6 +41,8 @@ Bellman-Ford Algorithm: O(V.E)
 
 Bellman ford is not O(V.Degree), it is O(V.E), observe properly.
 6 nodes and each node have 3 edges. Total = 9 edges. Then we are checking all 9 edges for n-1 times.
+Bellman ford helps to get shortest path for negative edges
+For negative cycles, it can detect, but it can't give correct path. No algo can give for this case.
 
 */
 
