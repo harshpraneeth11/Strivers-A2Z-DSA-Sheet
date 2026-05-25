@@ -38,6 +38,10 @@ Bellman-Ford Algorithm: Handles negative weights and detects negative-weight cyc
 2. Complexity:
 Dijkstra's Algorithm: O(E + VlogV)
 Bellman-Ford Algorithm: O(V.E)
+
+Bellman ford is not O(V.Degree), it is O(V.E), observe properly.
+6 nodes and each node have 3 edges. Total = 9 edges. Then we are checking all 9 edges for n-1 times.
+
 */
 
 const int INF = INT_MAX;
