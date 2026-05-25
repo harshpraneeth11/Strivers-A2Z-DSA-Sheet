@@ -61,6 +61,22 @@ public:
             size[vP] += size[uP];
         }
     }
+
+    void unionByRank(int u, int v) {
+        int uP = findUParent(u), vP = findUParent(v);
+        if (uP == vP) return;
+
+        if (rank[uP] < rank[vP]) {
+            parent[uP] = vP;
+        }
+        else if (rank[uP] > rank[vP]) {
+            parent[vP] = uP;
+        }
+        else {
+            parent[vP] = uP;
+            rank[uP]++;
+        }
+    }
 };
 
 int minimumSpanningTree(vector<vector<int>>& edges, int n) {
@@ -78,3 +94,9 @@ int minimumSpanningTree(vector<vector<int>>& edges, int n) {
 
     return ans;
 }
+//    Create a tuple if only (u, v) is given and wt is given to calcualte as wt =∣xi−xj∣+∣yi−yj∣
+//    vector<tuple<int,int,int>> edges; from vector<vector<int>>& points)
+//    If the order is (u, v, wt), then we have to sort based on 3rd value
+//    sort(edges.begin(), edges.end(), [](const vector<int>& a, const vector<int>& b) {
+//       return a[2] < b[2];   // wt is index 2
+//    });
