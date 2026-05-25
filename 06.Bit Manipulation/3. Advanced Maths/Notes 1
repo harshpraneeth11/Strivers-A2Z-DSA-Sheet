@@ -65,6 +65,9 @@ Bitwise XOR Swap Algorithm :
 a = a ^ b;  // Step 1: a becomes a ^ b
 b = a ^ b;  // Step 2: b becomes (a ^ b) ^ b = a (b is swapped)
 a = a ^ b;  // Step 3: a becomes (a ^ b) ^ a = b (a is swapped)
+
+a : a^b  a^b  b
+b : b     a   a
 ________________________
 
 XOR of all subsequences of an array :
