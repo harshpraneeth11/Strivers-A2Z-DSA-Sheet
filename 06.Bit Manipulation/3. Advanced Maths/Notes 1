@@ -1,5 +1,6 @@
 int getBit(int num, int i) {
-    return (num & (1 << i));
+    return (num & (1 << i)); 	    if we want the 0 or 1 value
+   // return ((num>>i) & 1);	 	if we want the 0 or 2^i value	
 }
 
 int setBit(int num, int i) {
@@ -14,11 +15,13 @@ int toggleBit(int num, int i) {
     return num ^ (1 << i);
 }
 
+// Here 4 cases are there, 0->1, 0->0, 1->0, 1->1.
 int updateBit(int num, int i, bool value) {
     num = num & ~(1 << i);  // Clear the bit at position i
     return num | (value << i);  // Set the bit to the desired value
 }
 
+// what is this ??
 int setBit = x & -x; // This isolates the rightmost set bit
 // -x is 2's complement. it is inverse + 1. 
 // 1's complement is simply inverse
