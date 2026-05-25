@@ -29,6 +29,18 @@ COMPLEXITY ANALYSIS:
 - The time complexity of Kruskal's algorithm is O(E log E), where E is the number of edges, due to the sorting step.
 - The space complexity is O(V) for the Disjoint Set data structure and other data structures.
 
+Path Compression : After finding root, directly connect node to root.
+Before: 1 → 2 → 3 → 4 (root)
+After path compression: 
+1 → 4	  2 → 4    3 → 4
+Flattens tree, Makes operations almost: O(1) amortized
+
+Rank : NOT exact height. Approximate tree depth
+Size : node-count-based
+
+Amortized time means:
+Even if one operation is expensive sometimes, the average cost per operation over a sequence of operations is small and stable.
+
 CODE:
 */
 
