@@ -27,26 +27,31 @@ PQ : for dense graphs, where redundant entries are not significant
 Set : for sparse graphs, as it significant
 */
 
+// pq.push({s, 0}) is correct. Braces are important
+
 vector<int> dijkstra(int n, vector<vector<int>> adj[], int s){
-    vector<int> dis(n, 1e9);
+    // priority_queue<int, vector<int>, greater<int>> pq;
+    
+    // {wt, node}
     priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
+    
+    vector<int> dist(n, 1e9);
+    dist[s] = 0;
+    pq.push(0, s);
 
-    dis[s] = 0;
-    pq.push({0, s});
+    while(!pq.empty()) {
+        int u = pq.top().second;        // there is no pq.top().second and pq.top()[2]
+        // here dist[v] = pq.top().first, because we push a node multiple times
 
-    while(!pq.empty()){
-        int u = pq.top().second;
-        pq.pop();
-        for(auto p : adj[u]){
-            int v = p[0], wt = p[1]; 
-            if(dis[u] + wt < dis[v]){
-                dis[v] = dis[u] + wt;
-                pq.push({dis[v], v});
+        for(auto it : adj[u]) {
+            int v = it[0], wt = it[1];
+            if(dist[u] + wt < dist[v]) {
+                dist[v] = dist[u] + wt;
+                pq.push(dist[v], v);
             }
         }
     }
-
-    return dis;
+    return dist;
 }
 ________________________________________________
 
