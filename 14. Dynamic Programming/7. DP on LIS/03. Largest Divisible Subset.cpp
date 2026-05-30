@@ -5,21 +5,17 @@ Given a set of distinct positive integers nums, return the largest subset answer
 - answer[j] % answer[i] == 0
 If there are multiple solutions, return any of them.
 
-APPROACH:
-- This problem can be solved using dynamic programming.
-- Sort the input array nums in ascending order.
-- Let dp[i] represent the size of the largest divisible subset ending at index i.
-- Additionally, maintain a prevmap to track the previous index in the subset.
-- Iterate through the sorted array and for each index i, iterate through all previous indices (prev) from 0 to i-1.
-- If nums[i] is divisible by nums[prev] and dp[i] < dp[prev] + 1, update dp[i] and prevmap[i].
-- Find the index i where dp has the maximum value.
-- Construct the largest divisible subset using the prevmap and the found index i.
-- Return the subset.
+Approach :
+Sort the array so that for any valid divisible pair, the smaller number comes before the larger one.
+Let dp[i] = length of the largest divisible subset ending at nums[i].
+For every i, check all j < i:
+If nums[i] % nums[j] == 0, then nums[i] can extend the subset ending at j.
+Update dp[i] = max(dp[i], dp[j] + 1).
+Store the parent index of each element to reconstruct the subset.
+Start from the index with maximum dp value and follow parent pointers to build the answer.
 
-COMPLEXITY ANALYSIS:
-- The time complexity of this approach is O(n^2), where n is the length of the input array nums.
-- The space complexity is O(n) due to the dp and prevmap arrays, as well as the lis vector.
-- Overall, the algorithm runs in O(n^2) time and O(n) space.
+Time Complexity: O(n²)
+Space Complexity: O(n)
 
 CODE:
 */
