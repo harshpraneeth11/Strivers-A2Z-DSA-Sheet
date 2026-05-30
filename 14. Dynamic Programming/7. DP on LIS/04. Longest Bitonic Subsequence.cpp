@@ -3,57 +3,51 @@ QUESTION:
 Given an array of positive integers, find the maximum length of a Bitonic subsequence.
 A subsequence of an array is called Bitonic if it is first strictly increasing and then strictly decreasing.
 
-APPROACH:
-- This problem can be solved using dynamic programming.
-- Compute two DP arrays: one from the left and another from the right.
-- The left DP array, `left`, represents the length of the longest increasing subsequence ending at index i.
-- The right DP array, `right`, represents the length of the longest decreasing subsequence starting at index i.
-- Iterate through the array and compute the `left` DP array, considering elements from the left to the right.
-- Iterate through the array again and compute the `right` DP array, considering elements from the right to the left.
-- The maximum length of the Bitonic subsequence is the maximum sum of the corresponding elements from the `left` and `right` DP arrays minus 1 (to avoid double counting the element at the peak).
-- Return the maximum length.
+Approach (Longest Bitonic Subsequence)
+1. Compute LIS (Longest Increasing Subsequence) ending at every index i.
+    lis[i] = length of the longest increasing subsequence ending at i.
+2. Compute LDS (Longest Decreasing Subsequence) starting from every index i.
+    lds[i] = length of the longest decreasing subsequence starting at i.
+3. Treat each index i as the peak of a bitonic subsequence.
+    Length of bitonic subsequence with peak at i:
+    lis[i] + lds[i] - 1
+    Subtract 1 because nums[i] is counted in both LIS and LDS.
+4. Take the maximum value over all indices.
+5. (If required by the problem) only consider indices where:
+    lis[i] > 1 && lds[i] > 1
+    so that the sequence has both an increasing and a decreasing part.
 
-COMPLEXITY ANALYSIS:
-- The time complexity of this approach is O(n^2), where n is the length of the input array nums.
-- The space complexity is O(n) due to the left and right DP arrays.
-- Overall, the algorithm runs in O(n^2) time and O(n) space.
+Time Complexity: O(n²)
+Space Complexity: O(n)
 
 CODE:
 */
-
-vector<int> fromLeft(int n, vector<int>& nums) {
-    vector<int> dp(n, 1);
-    for (int i = 0; i < n; i++) {
-        for (int prev = 0; prev < i; prev++) {
-            if (nums[prev] < nums[i]) {
-                dp[i] = max(dp[prev] + 1, dp[i]);
-            }
-        }
-    }
-    return dp;
-}
-
-vector<int> fromRight(int n, vector<int>& nums) {
-    vector<int> dp(n, 1);
-    for (int i = n - 1; i >= 0; i--) {
-        for (int prev = i + 1; prev < n; prev++) {
-            if (nums[prev] < nums[i]) {
-                dp[i] = max(dp[prev] + 1, dp[i]);
-            }
-        }
-    }
-    return dp;
-}
-
-int LongestBitonicSequence(vector<int> nums) {
+int LongestBitonicSequence(vector<int>& nums) {
     int n = nums.size();
-    vector<int> left = fromLeft(n, nums);
-    vector<int> right = fromRight(n, nums);
-    
-    int ans = -1;
-    for (int i = 0; i < n; i++) {
-        ans = max(ans, left[i] + right[i] - 1);
+    vector<int> lis(n, 1), lds(n, 1);
+
+    // LIS ending at i
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < i; ++j) {
+            if (nums[j] < nums[i]) {
+                lis[i] = max(lis[i], lis[j] + 1);
+            }
+        }
     }
-    
+
+    // LDS starting at i
+    for (int i = n - 1; i >= 0; --i) {
+        for (int j = i + 1; j < n; ++j) {
+            if (nums[j] < nums[i]) {
+                lds[i] = max(lds[i], lds[j] + 1);
+            }
+        }
+    }
+
+    int ans = 0;
+    for (int i = 0; i < n; ++i) {
+        ans = max(ans, lis[i] + lds[i] - 1);
+    }
+
     return ans;
 }
