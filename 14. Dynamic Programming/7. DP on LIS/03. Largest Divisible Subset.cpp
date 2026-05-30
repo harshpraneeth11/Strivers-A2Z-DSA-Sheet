@@ -31,32 +31,38 @@ If 16 is divisible by 8, then the earlier elements are simply factors of 8, so t
 It is good to do using tabulation, we can also do using memoization, but it is lengthy code
 */
 
-vector<int> ftab(int n, vector<int>& nums) {
-    vector<int> dp(n, 1);
-    vector<int> prevmap(n, -1);
-    
-    for (int i = 0; i < n; i++) {
-        for (int prev = 0; prev < i; prev++) {
-            if (nums[i] % nums[prev] == 0 && dp[i] < dp[prev] + 1) {
-                dp[i] = dp[prev] + 1;
-                prevmap[i] = prev;
-            }
-        }
-    }
-    
-    int i = max_element(dp.begin(), dp.end()) - dp.begin();
-    vector<int> lis;
-    
-    while (i >= 0) {
-        lis.push_back(nums[i]);
-        i = prevmap[i];
-    }
-    
-    return lis;
-}
-
 vector<int> largestDivisibleSubset(vector<int>& nums) {
     int n = nums.size();
     sort(nums.begin(), nums.end());
-    return ftab(n, nums);
+
+    vector<int> dp(n, 1);
+    vector<int> parent(n, -1);
+
+    int maxLen = 1;
+    int lastIdx = 0;
+
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < i; j++) {
+            if (nums[i] % nums[j] == 0 &&
+                dp[j] + 1 > dp[i]) {
+
+                dp[i] = dp[j] + 1;
+                parent[i] = j;
+            }
+        }
+
+        if (dp[i] > maxLen) {
+            maxLen = dp[i];
+            lastIdx = i;
+        }
+    }
+
+    vector<int> ans;
+    while (lastIdx != -1) {
+        ans.push_back(nums[lastIdx]);
+        lastIdx = parent[lastIdx];
+    }
+
+    reverse(ans.begin(), ans.end());
+    return ans;
 }
