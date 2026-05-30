@@ -22,6 +22,8 @@ Space Complexity: O(n)
 
 CODE:
 */
+
+// Tabulation
 int LongestBitonicSequence(vector<int>& nums) {
     int n = nums.size();
     vector<int> lis(n, 1), lds(n, 1);
@@ -51,3 +53,55 @@ int LongestBitonicSequence(vector<int>& nums) {
 
     return ans;
 }
+
+// _________________________________________________________________
+
+// Memoization
+class Solution {
+public:
+    int LIS(int i, vector<int>& nums, vector<int>& dp1) {
+        if (dp1[i] != -1) return dp1[i];
+
+        int ans = 1;
+
+        for (int prev = 0; prev < i; prev++) {
+            if (nums[prev] < nums[i]) {
+                ans = max(ans, 1 + LIS(prev, nums, dp1));
+            }
+        }
+
+        return dp1[i] = ans;
+    }
+
+    int LDS(int i, vector<int>& nums, vector<int>& dp2) {
+        if (dp2[i] != -1) return dp2[i];
+
+        int ans = 1;
+
+        for (int next = i + 1; next < nums.size(); next++) {
+            if (nums[next] < nums[i]) {
+                ans = max(ans, 1 + LDS(next, nums, dp2));
+            }
+        }
+
+        return dp2[i] = ans;
+    }
+
+    int LongestBitonicSequence(vector<int> nums) {
+        int n = nums.size();
+
+        vector<int> dp1(n, -1); // LIS ending at i
+        vector<int> dp2(n, -1); // LDS starting at i
+
+        int ans = 0;
+
+        for (int i = 0; i < n; i++) {
+            int inc = LIS(i, nums, dp1);
+            int dec = LDS(i, nums, dp2);
+
+            ans = max(ans, inc + dec - 1);
+        }
+
+        return ans;
+    }
+};
