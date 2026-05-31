@@ -70,8 +70,45 @@ int fopt(int n, int m, string& s, string& r){
     return prev[m];
 }
 
+// Print LCS
+string getLCS(int n, int m, string& s, string& r) {
+    vector<vector<int>> dp(n + 1, vector<int>(m + 1, 0));
+
+    // Build DP table
+    for(int i = 1; i <= n; i++) {
+        for(int j = 1; j <= m; j++) {
+            if(s[i - 1] == r[j - 1])
+                dp[i][j] = dp[i - 1][j - 1] + 1;
+            else
+                dp[i][j] = max(dp[i - 1][j], dp[i][j - 1]);
+        }
+    }
+
+    // Backtrack to construct LCS
+    int i = n, j = m;
+    string ans = "";
+
+    while(i > 0 && j > 0) {
+        if(s[i - 1] == r[j - 1]) {
+            ans += s[i - 1];
+            i--;
+            j--;
+        }
+        else if(dp[i - 1][j] > dp[i][j - 1]) {
+            i--;
+        }
+        else {
+            j--;
+        }
+    }
+
+    reverse(ans.begin(), ans.end());
+    return ans;
+}
+
 int longestCommonSubsequence(string text1, string text2) {
     int n = text1.size(), m = text2.size();
     vector<vector<int>> dp(n, vector<int>(m, -1));
     return fmemo(n - 1, m - 1, text1, text2, dp);
 }
+
