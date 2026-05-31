@@ -19,6 +19,15 @@ COMPLEXITY ANALYSIS:
 
 CODE:
 */
+/*
+Print LCS :
+Match → Take character
+Mismatch → Move only
+
+Print SCS : 
+Match → Take character once
+Mismatch → Take character and move
+*/
 
 string shortestCommonSupersequence(string str1, string str2) {
     int n = str1.size(), m = str2.size();
@@ -42,20 +51,20 @@ string shortestCommonSupersequence(string str1, string str2) {
             j--;
         } else {
             if (dp[i - 1][j] > dp[i][j - 1]) {
-                scs = str1[i - 1] + scs;
+                scs = str1[i - 1] + scs;       // unlike print LCS
                 i--;
             } else {
-                scs = str2[j - 1] + scs;
+                scs = str2[j - 1] + scs;        // unlike print LCS
                 j--;
             }
         }
     }
     while (i > 0) {
-        scs = str1[i - 1] + scs;
-        i--;
+        scs = str1[i - 1] + scs;                // unlike print LCS
+        i--;    
     }
     while (j > 0) {
-        scs = str2[j - 1] + scs;
+        scs = str2[j - 1] + scs;                // unlike print LCS
         j--;
     }
     return scs;
