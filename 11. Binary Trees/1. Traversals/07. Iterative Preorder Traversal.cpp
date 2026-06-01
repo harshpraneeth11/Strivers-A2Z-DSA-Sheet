@@ -14,33 +14,92 @@ Return Result: Once the stack is empty, return the preorder traversal result.
 TC : O(N) and SC : O(N)
 */ 
 
-class Solution {
-public:
-    vector<int> preorderTraversal(TreeNode* root) {
-        vector<int> preorder;
-        
-        if(root == nullptr) {
-            return preorder;
-        }
-        
-        stack<TreeNode*> st;
-        st.push(root);
-        
-        while(!st.empty()) {
-            root = st.top();
-            st.pop();
-            
-            preorder.push_back(root->val);
-            
-            if(root->right != nullptr) {
-                st.push(root->right);
-            }
-            
-            if(root->left != nullptr) {
-                st.push(root->left);
-            }
-        }
-        
-        return preorder;
+      //     1
+      //  2     3
+      // 4 5   6 7
+
+vector<int> preorderTraversal(TreeNode* root) {
+    vector<int> ans;
+    if (!root) return ans;
+
+    stack<TreeNode*> st;
+    st.push(root);
+
+    while (!st.empty()) {
+        TreeNode* node = st.top();
+        st.pop();
+
+        ans.push_back(node->val);
+
+        // first right, then left
+        if (node->right) st.push(node->right);
+        if (node->left) st.push(node->left);
     }
-};
+
+    return ans;
+}
+
+// 1 2 4 5 3 6 7
+
+
+      //     1
+      //  2     3
+      // 4 5   6 7
+
+// 4 5 2 6 7 3 1
+
+vector<int> postorderTraversal(TreeNode* root) {
+    vector<int> ans;
+    if (!root) return ans;
+
+    stack<TreeNode*> st;
+    st.push(root);
+
+    while (!st.empty()) {
+        TreeNode* node = st.top();
+        st.pop();
+
+        ans.push_back(node->val);
+
+        // first right, then left
+        if (node->right) st.push(node->right);
+        if (node->left) st.push(node->left);
+    }
+    reverse(ans.begin(), ans.end());
+    return ans;
+}
+
+
+//           1
+//        2     3
+//       4 5   6 7
+
+// 4 2 5 1 6 3 7
+
+// st = 1
+// ans = 4 2  
+
+vector<int> inorderTraversal(TreeNode* root) {
+    vector<int> ans;
+    stack<TreeNode*> st;
+    TreeNode* curr = root;
+
+    while (curr || !st.empty()) {
+
+        // Reach the leftmost node, storing the path in the stack
+        while (curr) {
+            st.push(curr);
+            curr = curr->left;
+        }
+
+        // Left subtree is processed, now visit the node
+        curr = st.top();
+        st.pop();
+        ans.push_back(curr->val);
+
+        // Start processing the right subtree
+        curr = curr->right;
+    }
+
+    return ans;
+}
