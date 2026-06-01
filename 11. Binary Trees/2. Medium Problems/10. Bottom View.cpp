@@ -24,6 +24,7 @@ public:
             return ans;
         }
 
+        // Use map and queue like this  -- main thing
         map<int, int> mpp;
         queue<pair<Node*, int>> q;
         q.push({root, 0});
@@ -34,6 +35,7 @@ public:
             Node* node = it.first;
             int line = it.second;
 
+            // This is the difference
             mpp[line] = node->data;
 
             if (node->left != NULL) {
