@@ -28,20 +28,19 @@ After 6 sec: 9 is set to fire.
 After 7 sec: 10 is set to fire.
 It takes 7s to burn the complete tree.
 
-
-APPROACH:
-
-To find the minimum time required to burn the complete binary tree, we need to perform a BFS (level-order traversal) starting 
-from the target node. While doing BFS, we will also keep track of the parent node for each node using a hash map. 
-The parent node will be used to traverse upward from the target node in the BFS process.
-
-We will burn the target node and its adjacent nodes (left child, right child, and parent) one by one in each second. 
-By the time we burn all nodes in the last level, all other nodes in the binary tree would have been burned as well.
-
-Finally, we will count the number of seconds it took to burn the complete binary tree.
+Approach:
+- Store the parent of every node using a traversal, since fire can spread upward as well.
+- Find the target node from where the fire starts.
+- Perform BFS starting from the target node.
+- For each node, spread fire to:
+    1. Left child
+    2. Right child
+    3. Parent
+- Use a visited map to avoid revisiting nodes.
+- Each BFS level represents 1 second.
+- The number of levels required to burn all nodes is the answer.
 
 COMPLEXITY ANALYSIS:
-
 Let `n` be the number of nodes in the binary tree.
 - Time Complexity: The time complexity of this approach is O(n) since we perform a BFS starting from the target node, 
 visiting all nodes in the binary tree once.
@@ -49,61 +48,88 @@ visiting all nodes in the binary tree once.
 
 CODE:
 */
+// unordered_map<Node*, Node*> parent;   Use this to map the nodes with parents
+// we got targetNode's value and not node directly. So, find it first
+// we used burned variable, instead time = -1 can be used at start.
+// if there are only one more level. then time gets chanegd to -1 -> 0 -> 1.
 
 class Solution {
-  public:
-    void setParent(Node* root, unordered_map<Node*, Node*>& parent, Node*& start, int target) {
-        if (!root) return;
-        if (root->data == target) start = root;                   // Finding the root in the fly
-        if (root->left) parent[root->left] = root;
-        if (root->right) parent[root->right] = root;
-        setParent(root->left, parent, start, target);
-        setParent(root->right, parent, start, target);
+public:
+
+    void mapParents(Node* node, unordered_map<Node*, Node*>& parent) {
+        if (!node) return;
+
+        if (node->left) {
+            parent[node->left] = node;
+            mapParents(node->left, parent);
+        }
+
+        if (node->right) {
+            parent[node->right] = node;
+            mapParents(node->right, parent);
+        }
+    }
+
+    Node* findTarget(Node* root, int target) {
+        if (!root) return NULL;
+        if (root->data == target) return root;
+
+        Node* left = findTarget(root->left, target);
+        if (left) return left;
+
+        return findTarget(root->right, target);
     }
 
     int minTime(Node* root, int target) {
-        
+
         unordered_map<Node*, Node*> parent;
-        Node* start = nullptr;
-        setParent(root, parent, start, target);
+        mapParents(root, parent);
 
+        // we got targetNode's value and not node directly
+        Node* targetNode = findTarget(root, target);
+
+        unordered_map<Node*, bool> visited;
         queue<Node*> q;
-        unordered_set<Node*> visited;
 
-        q.push(start);
-        visited.insert(start);
+        q.push(targetNode);
+        visited[targetNode] = true;
+
         int time = 0;
 
         while (!q.empty()) {
-            int n = q.size();
-            bool burnt = false;
 
-            for (int i = 0; i < n; i++) {
-                Node* curr = q.front();
+            int size = q.size();
+            bool burned = false;
+
+            for (int i = 0; i < size; i++) {
+
+                Node* node = q.front();
                 q.pop();
 
-                // Process left child
-                if (curr->left && visited.find(curr->left) == visited.end()) {
-                    q.push(curr->left);
-                    visited.insert(curr->left);
-                    burnt = true;
+                // node goes to its parent and again comes back
+                // without visited, causing revisits
+
+                if (node->left && !visited[node->left]) {
+                    visited[node->left] = true;
+                    q.push(node->left);
+                    burned = true;
                 }
 
-                // Process right child
-                if (curr->right && visited.find(curr->right) == visited.end()) {
-                    q.push(curr->right);
-                    visited.insert(curr->right);
-                    burnt = true;
+                if (node->right && !visited[node->right]) {
+                    visited[node->right] = true;
+                    q.push(node->right);
+                    burned = true;
                 }
 
-                // Process parent
-                if (parent[curr] && visited.find(parent[curr]) == visited.end()) {
-                    q.push(parent[curr]);
-                    visited.insert(parent[curr]);
-                    burnt = true;
+                if (parent[node] && !visited[parent[node]]) {
+                    visited[parent[node]] = true;
+                    q.push(parent[node]);
+                    burned = true;
                 }
             }
-            if (burnt) time++;
+
+            // Fire spread during this second
+            if (burned) time++;
         }
 
         return time;
