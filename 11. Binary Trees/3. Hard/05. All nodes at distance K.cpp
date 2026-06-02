@@ -60,6 +60,8 @@ public:
             for (int i = 0; i < size; i++) {
                 TreeNode* node = q.front();
                 q.pop();
+
+     // node goes to it's parent and again go back to the visited child node, if there is no visisted vector
                 if (node->left && !visited[node->left]) {
                     visited[node->left] = true;
                     q.push(node->left);
