@@ -17,55 +17,80 @@ Space Complexity:
 
 */
 
-stack<TreeNode*> stl;
-stack<TreeNode*> str;
+/*
+This line: 
+BSTIterator l(root, false);
 
-void pushLeft(TreeNode* root) {
-    while (root) {
-        stl.push(root);
-        root = root->left;
-    }
+creates an object l of the BSTIterator class and calls its constructor:
+BSTIterator(TreeNode* root, bool rev) {
+    reverse = rev;
+    pushAll(root);
 }
 
-void pushRight(TreeNode* root) {
-    while (root) {
-        str.push(root);
-        root = root->right;
-    }
-}
+So it is equivalent to: 
+BSTIterator l = BSTIterator(root, false);
+*/
 
-int next() {
-    if (stl.empty()) return 1e9;
-    TreeNode* ans = stl.top();
-    stl.pop();
-    if (ans->right) {
-        pushLeft(ans->right);
-    }
-    return ans->val;
-}
+class BSTIterator {
+    stack<TreeNode*> st;
+    bool reverse;
 
-int before() {
-    if (str.empty()) return 1e9;
-    TreeNode* ans = str.top();
-    str.pop();
-    if (ans->left) {
-        pushRight(ans->left);
-    }
-    return ans->val;
-}
+    void pushAll(TreeNode* node) {
+        while (node) {
+            st.push(node);
 
-bool findTarget(TreeNode* root, int k) {
-    pushLeft(root);
-    pushRight(root);
-
-    int l = next();
-    int r = before();
-    while (l < r) {
-        if (l == 1e9 || r == 1e9) return false;
-        if (l + r == k) return true;
-        else if (l + r < k) l = next();
-        else r = before();
+            if (reverse) node = node->right;
+            else node = node->left;
+        }
     }
 
-    return false;
-}
+public:
+    BSTIterator(TreeNode* root, bool rev) {
+        reverse = rev;
+        pushAll(root);
+    }
+
+    bool hasNext() {
+        return !st.empty();
+    }
+
+    int next() {
+        TreeNode* node = st.top();
+        st.pop();
+
+        if (reverse) pushAll(node->left);
+        else pushAll(node->right);
+
+        return node->val;
+    }
+};
+
+class Solution {
+public:
+    bool findTarget(TreeNode* root, int k) {
+        if (!root) return false;
+
+        BSTIterator left(root, false);   // smallest -> largest
+        BSTIterator right(root, true);   // largest -> smallest
+
+        int l = left.next();
+        int r = right.next();
+
+        while (l < r) {
+            int sum = l + r;
+
+            if (sum == k) return true;
+
+            else if (sum < k) {
+                if (!left.hasNext()) return false;
+                l = left.next();
+            }
+            else {
+                if (!right.hasNext()) return false;
+                r = right.next();
+            }
+        }
+        
+        return false;
+    }
+};
