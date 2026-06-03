@@ -9,17 +9,19 @@ Recursive Traversal: Recursively compute the diameter of the left and right subt
 TC : O(N^2)
 */ 
 
+// ** leftDiameter means any diamter on the left subtree
+// it need not pass through the leftsutbree root
+// Heights and diameters are clalcualted seperately in apprach 1 with TC : O(N^2)
+// In 2nd approach, heights are calculated along with diameter with TC : O(N)
+
 int calculateHeight(TreeNode* node) {
-    if (node == nullptr) {
-        return 0;
-    }
+    if (!node) return 0;
     return 1 + max(calculateHeight(node->left), calculateHeight(node->right));
 }
 
 int diameterOfBinaryTree(TreeNode* root) {
-    if (root == nullptr) {
-        return 0;
-    }
+    if (!node) return 0;
+
     int leftHeight = calculateHeight(root->left);
     int rightHeight = calculateHeight(root->right);
     int currentDiameter = leftHeight + rightHeight;
@@ -29,7 +31,7 @@ int diameterOfBinaryTree(TreeNode* root) {
     return max(currentDiameter, max(leftDiameter, rightDiameter));
 }
 
-___________________________________________________
+// ___________________________________________________
 
 /*
 Approach 2:
@@ -50,9 +52,8 @@ Code:
 */
 
 int maxDepth(TreeNode* root, int& diameter) {
-    if (!root) {
-        return 0;
-    }
+    if (!node) return 0;
+
     int left = maxDepth(root->left, diameter);
     int right = maxDepth(root->right, diameter);
     diameter = max(diameter, left + right);
