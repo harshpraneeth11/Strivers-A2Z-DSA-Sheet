@@ -22,6 +22,7 @@ Let n be the number of nodes in the binary tree.
 Each node is visited at most 2 times
 1st: before going left
 2nd: when coming back via thread
+Some: during scan of rightMost node too
 But each node is added to result only once (inorder/preorder logic)
 So: 2 visits max, 1 actual processing/output
 
