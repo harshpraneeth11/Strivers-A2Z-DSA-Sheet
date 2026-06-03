@@ -6,66 +6,31 @@ The path sum of a path is the sum of the node's values in the path.
 Given the root of a binary tree, return the maximum path sum of any non-empty path.
 */
 
-// We calculate from the top with TC : O(N^2)
-// We visit twice
+// Time Complexity: O(N)
+// Visit each node exactly once.
+// Space Complexity: O(H)
+// Recursion stack stores at most H nodes.
+// H = log N for a balanced tree.
 
-int getMaxSumFromNode(TreeNode* root) {
-    if (root == nullptr) {
-        return 0;
+class Solution {
+public:
+    int maxi = INT_MIN;
+
+    int dfs(TreeNode* root) {
+        if (!root) return 0;
+
+        int left = max(0, dfs(root->left));
+        int right = max(0, dfs(root->right));
+
+        // Path passing through current node
+        maxi = max(maxi, left + right + root->val);
+
+        // Return best downward path
+        return root->val + max(left, right);
     }
-    int leftSum = max(0, getMaxSumFromNode(root->left));
-    int rightSum = max(0, getMaxSumFromNode(root->right));
-    return root->val + leftSum + rightSum;
-}
 
-int maxPathSum(TreeNode* root) {
-    if (root == nullptr) {
-        return 0;
+    int maxPathSum(TreeNode* root) {
+        dfs(root);
+        return maxi;
     }
-
-    int maxSum = root->val;
-    maxSum = max(maxSum, getMaxSumFromNode(root));
-    maxSum = max(maxSum, maxPathSum(root->left));
-    maxSum = max(maxSum, maxPathSum(root->right));
-
-    return maxSum;
-}
-*/
-_________________________________________________
-
-/*
-Approach:
-- The maximum path sum can be calculated using a recursive approach.
-- For each node, we calculate the maximum path sum that includes the node as the root.
-- The maximum path sum that includes the current node is the maximum of the following values:
-  - The value of the current node.
-  - The maximum path sum of the left subtree plus the value of the current node.
-  - The maximum path sum of the right subtree plus the value of the current node.
-  - The maximum path sum of the left subtree plus the maximum path sum of the right subtree plus the value of the current node.
-- During the calculation, we keep track of the maximum path sum encountered so far and update it if necessary.
-- We return the maximum path sum encountered overall.
-
-Complexity Analysis:
-- Since we visit each node once and perform constant time operations for each node, the time complexity of this approach is O(N), where N is the number of nodes in the binary tree.
-- The space complexity is O(H), where H is the height of the binary tree. In the worst case, the tree can be skewed and have a height of N, resulting in O(N) space complexity. In the best case, the tree is balanced and has a height of log(N), resulting in O(log(N)) space complexity.
-
-Code:
-*/
-// We calculate from the bottom, once visit, TC : O(N)
-
-int solve(TreeNode* root, int& maxSum) {
-    if (!root) {
-        return 0;
-    }
-    int leftSum = max(0, solve(root->left, maxSum));
-    int rightSum = max(0, solve(root->right, maxSum));
-    int currentSum = root->val + leftSum + rightSum;
-    maxSum = max(maxSum, currentSum);
-    return root->val + max(leftSum, rightSum);
-}
-
-int maxPathSum(TreeNode* root) {
-    int maxSum = INT_MIN;
-    solve(root, maxSum);
-    return maxSum;
-}
+};
