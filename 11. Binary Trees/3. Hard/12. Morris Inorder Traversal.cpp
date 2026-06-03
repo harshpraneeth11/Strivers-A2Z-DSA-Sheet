@@ -18,7 +18,13 @@ We can achieve a non-recursive inorder traversal without using extra space by mo
 COMPLEXITY ANALYSIS:
 
 Let n be the number of nodes in the binary tree.
-- Time Complexity: The time complexity of this approach is O(n) since we visit each node once.
+- Time Complexity: The time complexity of this approach is O(n) since we visit each node max twice.
+Each node is visited at most 2 times
+1st: before going left
+2nd: when coming back via thread
+But each node is added to result only once (inorder/preorder logic)
+So: 2 visits max, 1 actual processing/output
+
 - Space Complexity: The space complexity is O(1) since we don't use any extra space.
 
 CODE:
