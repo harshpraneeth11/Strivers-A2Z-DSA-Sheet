@@ -11,6 +11,7 @@ TC : O(N^2)
 
 // ** leftDiameter means any diamter on the left subtree
 // it need not pass through the leftsutbree root
+// Diamter means edge lengths, not nodes
 // Heights and diameters are clalcualted seperately in apprach 1 with TC : O(N^2)
 // In 2nd approach, heights are calculated along with diameter with TC : O(N)
 
