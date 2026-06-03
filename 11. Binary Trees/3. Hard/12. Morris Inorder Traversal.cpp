@@ -31,6 +31,9 @@ So: 2 visits max, 1 actual processing/output
 CODE:
 */
 
+// Morris Preorder : You push the root BEFORE creating the thread, before entering the left subtree
+// Morris Inorder : You push while removing the thread, after coming back from left subtree
+
 vector<int> inOrder(Node* root) {
     vector<int> ans;
     Node* curr = root;
