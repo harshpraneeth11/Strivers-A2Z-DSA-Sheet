@@ -34,6 +34,13 @@ We can modify the standard binary search algorithm to search for the target elem
 CODE:
 */
 
+// nums = [1,0,1,1,1] and target = 0. 
+// Here,  if (nums[low] <= nums[mid]) {
+//             if (nums[low] <= target && target <= nums[mid])  // faile
+//                 high = mid - 1;
+//             else // succeed and fails
+//                 low = mid + 1;
+
 bool search(vector<int>& nums, int target) {
     int low = 0, high = nums.size() - 1;
 
