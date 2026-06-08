@@ -26,15 +26,19 @@ To find the value of K, we can use binary search.
 CODE:
 */
 
-int findKRotation(int arr[], int n) {
-    int low = 0, high = n - 1;
+int findRotationCount(vector<int>& nums) {
+    int low = 0, high = nums.size() - 1;
     while (low < high) {
         int mid = low + (high - low) / 2;
-        if (arr[mid] > arr[high])
+        // mid is in right sorted part
+        if (nums[mid] > nums[high]) 
             low = mid + 1;
-        else
+    
+        // mid is in left sorted part (including min)
+        else 
             high = mid;
     }
+    // low points to minimum element
     return low;
 }
 
