@@ -19,15 +19,25 @@ We can use the binary search approach to find the minimum element.
 CODE:
 */
 
+// We are not doing “search for a target”.
+// We are doing: shrink the search space until only 1 element remains
+
 int findMin(vector<int>& nums) {
-    int low = 0, high = nums.size()-1;
-    while(low < high){
+    int low = 0, high = nums.size() - 1;
+
+    while (low < high) {
         int mid = low + (high - low) / 2;
-        if(nums[mid] > nums[high])
-            low = mid+1;
-        else
+
+        // mid is in left sorted part and the small part comes in right side for sure
+        if (nums[mid] > nums[high]) {
+            low = mid + 1;
+        }
+        // mid is in right sorted part (or could be min)
+        else {
             high = mid;
+        }
     }
+
     return nums[low];
 }
 
