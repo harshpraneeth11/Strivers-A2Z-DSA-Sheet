@@ -44,7 +44,7 @@ bool isPossible(int mid, int A[], int N, int M) {
             temp = A[i];
         }
     }
-    if (pos_m <= M)
+    if (pos_m <= M)        // don't stop at pos_m == M
         return true;
     return false;
 }
