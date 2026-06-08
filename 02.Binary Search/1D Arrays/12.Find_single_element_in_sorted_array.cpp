@@ -22,20 +22,32 @@ CODE:
 
 int singleNonDuplicate(vector<int>& nums) {
     int low = 0, high = nums.size() - 1;
+
     while (low < high) {
         int mid = low + (high - low) / 2;
+
+        // even index case
+        // 1 1 2 2 3
+        // 1 2 2 3 3
         if (mid % 2 == 0) {
-            if (nums[mid] == nums[mid + 1])
-                low = mid + 1;
-            else
-                high = mid;
-        } else {
-            if (nums[mid] != nums[mid + 1])
-                low = mid + 1;
-            else
-                high = mid;
+            if (nums[mid] == nums[mid + 1]) {
+                low = mid + 2;   // pair is valid, go right
+            } else {
+                high = mid;      // break found, go left
+            }
+        }
+        // odd index case
+        // 1 1 2 2 3 3 4
+        // 1 2 2 3 3 4 4
+        else {
+            if (nums[mid] == nums[mid - 1]) {
+                low = mid + 1;   // pair is valid, go right
+            } else {
+                high = mid;      // break found, go left
+            }
         }
     }
+
     return nums[low];
 }
 
