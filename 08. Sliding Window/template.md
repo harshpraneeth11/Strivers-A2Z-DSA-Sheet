@@ -261,8 +261,9 @@ for (int r = 0; r < n; r++) {
     ans = max(ans, r - l + 1);
 }
 ```
-
 ### Key Idea:
 
 Window validity depends on frequency structure
+
 ---
+
