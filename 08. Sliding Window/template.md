@@ -190,10 +190,79 @@ long long exactK(...) {
 
 ---
 
-If you want, I can also convert this into:
+# 6. Fixed Window with Data Structure (Monotonic Deque)
 
-* 📄 One-page PDF cheat sheet (interview revision sheet)
-* 🧠 Anki flashcards for revision
-* 💻 VS Code snippet template (auto-expand typing shortcuts)
+### Used in:
 
-Just tell 👍
+* Sliding Window Maximum
+* Min in every window
+* Next greater/previous greater style window problems
+
+### Template:
+
+```cpp
+deque<int> dq;
+int l = 0;
+
+for (int r = 0; r < n; r++) {
+
+    // maintain monotonic decreasing deque
+    while (!dq.empty() && dq.back() < arr[r])
+        dq.pop_back();
+
+    dq.push_back(arr[r]);
+
+    if (r - l + 1 == k) {
+
+        // answer is front of deque
+        ans.push_back(dq.front());
+
+        // remove left element if it leaves window
+        if (dq.front() == arr[l])
+            dq.pop_front();
+
+        l++;
+    }
+}
+```
+
+### Key Idea:
+
+Maintain a structure that gives max/min in O(1)
+
+---
+
+#  7. Frequency / HashMap Window
+
+### Used in:
+
+* Longest substring with K distinct
+* Anagram search
+* Permutation in string
+* Substring with all characters
+
+### Template:
+
+```cpp
+unordered_map<char,int> mp;
+int l = 0;
+
+for (int r = 0; r < n; r++) {
+
+    mp[s[r]]++;
+
+    while (mp.size() > K) {
+        mp[s[l]]--;
+        if (mp[s[l]] == 0)
+            mp.erase(s[l]);
+        l++;
+    }
+
+    ans = max(ans, r - l + 1);
+}
+```
+
+### Key Idea:
+
+Window validity depends on frequency structure
+---
