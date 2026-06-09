@@ -19,17 +19,17 @@ APPROACH:
 CODE:*/
 
 int longestOnes(vector<int>& nums, int k) {
-    int zeroCnt = 0, start = 0, ans = 0;
-    for(int i = 0; i < nums.size(); i++) {
-        if(nums[i] == 0)
-            zeroCnt++;
-        while(zeroCnt > k) {
-            if(nums[start] == 0)
-                zeroCnt--;
-            start++;
+    int l = 0, ZeroCount = 0;
+    for (int r = 0; r < n; r++) {
+        // include arr[r]
+        if(nums[r] == 0) zeroCount++;
+
+        while (zeroCount > k) {
+            if(nums[l] == 0) zeroCount--;
+            l++;
         }
-        if(zeroCnt <= k)
-            ans = max(ans, i - start + 1);
+
+        ans = max(ans, r - l + 1);  
     }
     return ans;
 }
