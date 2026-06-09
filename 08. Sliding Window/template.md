@@ -272,11 +272,11 @@ for (int r = 0; r < n; r++) {
 ### Key Idea:
 
 Window validity depends on frequency structure
-
 ---
 
+# Template 1: Count by fixing r (end index)
 
-Template 1: Count by fixing r (end index)
+```cpp
 for (int r = 0; r < n; r++) {
     add(s[r]);
 
@@ -286,8 +286,9 @@ for (int r = 0; r < n; r++) {
 
     ans += l;
 }
+```
 
-Idea:
+### Key Idea:
 
 l = first invalid start
 
@@ -295,7 +296,10 @@ Valid starts:
 0 ... l-1
 
 Count = l
-Template 2: Count by fixing l (start index)
+
+# Template 2: Count by fixing l (start index)
+
+```cpp
 for (int r = 0; r < n; r++) {
     add(s[r]);
 
@@ -304,8 +308,10 @@ for (int r = 0; r < n; r++) {
         remove(s[l++]);
     }
 }
+```
 
-Idea:
+### Key Idea:
 [l..r] is valid
 All extensions are valid: [l..r], [l..r+1], ..., [l..n-1]
 Count = n - r
+---
