@@ -275,3 +275,37 @@ Window validity depends on frequency structure
 
 ---
 
+
+Template 1: Count by fixing r (end index)
+for (int r = 0; r < n; r++) {
+    add(s[r]);
+
+    while (valid()) {
+        remove(s[l++]);
+    }
+
+    ans += l;
+}
+
+Idea:
+
+l = first invalid start
+
+Valid starts:
+0 ... l-1
+
+Count = l
+Template 2: Count by fixing l (start index)
+for (int r = 0; r < n; r++) {
+    add(s[r]);
+
+    while (valid()) {
+        ans += (n - r);
+        remove(s[l++]);
+    }
+}
+
+Idea:
+[l..r] is valid
+All extensions are valid: [l..r], [l..r+1], ..., [l..n-1]
+Count = n - r
