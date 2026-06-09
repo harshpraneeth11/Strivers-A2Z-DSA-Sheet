@@ -297,6 +297,9 @@ Valid starts:
 
 Count = l
 
+* 1st : we add count before moving l : this is there in inside while loop during shrinking
+* 2nd : we add count before moving r : this is there at the end of block
+
 # Template 2: Count by fixing l (start index)
 
 ```cpp
@@ -314,4 +317,7 @@ for (int r = 0; r < n; r++) {
 [l..r] is valid
 All extensions are valid: [l..r], [l..r+1], ..., [l..n-1]
 Count = n - r
+
+* 1st : we add count before moving l : this is there in inside while loop during shrinking
+* 2nd : we add count before moving r : this is there at the end of block
 ---
