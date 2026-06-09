@@ -201,6 +201,14 @@ long long exactK(...) {
 ### Template:
 
 ```cpp
+
+[ 8 6 2 -1 ] and arr[i] = 3
+Then -1 and 2 will be removed and 3 is added at back
+And it becomes [ 8 6 3 ]
+Now, we check if the left most value in queue or the maximum
+is from the left most value in current window, then we remove the left most
+in queue and do l++
+
 deque<int> dq;
 int l = 0;
 
