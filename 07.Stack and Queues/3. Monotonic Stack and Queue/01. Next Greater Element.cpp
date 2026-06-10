@@ -13,44 +13,46 @@ Explanation: The next greater element for each value of nums1 is as follows:
 - 1 is underlined in nums2 = [1,3,4,2]. The next greater element is 3.
 - 2 is underlined in nums2 = [1,3,4,2]. There is no next greater element, so the answer is -1.
 
-Approach:
-- We can solve this problem using a stack and a hashmap.
-- First, we iterate through the `nums2` array from right to left.
-- For each element, we pop elements from the stack that are smaller than or equal to the current element and store the next greater element for each popped element in the hashmap.
-- Finally, we iterate through the `nums1` array and retrieve the next greater element from the hashmap if it exists, otherwise assign -1.
-
 Code:
 */
 
-void nextGstack(vector<int>& nums, unordered_map<int, int>& mp) {
-    stack<int> st;
-    for (int i = nums.size() - 1; i >= 0; i--) {
-        while (!st.empty() && st.top() <= nums[i]) {
-            st.pop();
+class Solution {
+public:
+    vector<int> nextGreaterElement(vector<int>& nums1, vector<int>& nums2) {
+        unordered_map<int, int> nge; // value -> next greater value
+        stack<int> st;
+
+        // Find NGE for every element in nums2
+        for (int i = nums2.size() - 1; i >= 0; i--) {
+
+            // Remove all elements that can't be NGE for nums2[i]
+            while (!st.empty() && st.top() <= nums2[i]) {
+                st.pop();
+            }
+
+            // Top of stack is the next greater element
+            nge[nums2[i]] = st.empty() ? -1 : st.top();
+
+            // Current element can be NGE for elements on its left
+            st.push(nums2[i]);
         }
-        if (!st.empty())
-            mp[nums[i]] = st.top();
 
-        st.push(nums[i]);
+        vector<int> ans;
+
+        // Lookup answers for nums1 from the map
+        for (int x : nums1) {
+            ans.push_back(nge[x]);
+        }
+
+        return ans;
     }
-}
-
-vector<int> nextGreaterElement(vector<int>& nums1, vector<int>& nums2) {
-    unordered_map<int, int> mp;
-    nextGstack(nums2, mp);
-
-    vector<int> ans(nums1.size(), -1);
-
-    for (int i = 0; i < nums1.size(); i++) {
-        if (mp.find(nums1[i]) != mp.end())
-            ans[i] = mp[nums1[i]];
-    }
-    return ans;
-}
+};
 
 /*
-Complexity Analysis:
-- The time complexity of the `nextGreaterElement` function is O(N + M), where N is the size of `nums1` and M is the size of `nums2`.
-- The `nextGstack` function has a time complexity of O(M), where M is the size of `nums2`.
-- The space complexity is O(N), where N is the size of `nums1`, to store the result in the `ans` vector and the `mp` hashmap.
+Time Complexity: O(n + m)
+O(n) to compute Next Greater Elements for nums2
+O(m) to answer queries for nums1
+Space Complexity: O(n + m)
+O(n) for stack + hashmap
+O(m) for output array
 */
