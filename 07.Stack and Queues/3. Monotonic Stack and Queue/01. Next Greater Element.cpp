@@ -16,6 +16,9 @@ Explanation: The next greater element for each value of nums1 is as follows:
 Code:
 */
 
+// I used vector for having the fast pickup during the query vector / nums1 vector
+// Else, we can use vector with -1 default value of size n
+
 class Solution {
 public:
     vector<int> nextGreaterElement(vector<int>& nums1, vector<int>& nums2) {
