@@ -16,23 +16,29 @@ The top of the stack at each iteration will hold the nearest smaller number on t
 
 CODE:*/
 
-vector<int> leftSmaller(int n, int arr[]) {
-    stack<int> st;
-    vector<int> ans(n, -1);
+class Solution {
+public:
+    vector<int> previousSmallerElement(vector<int>& nums) {
 
-    for (int i = 0; i < n; i++) {
-        while (!st.empty() && st.top() >= arr[i])
-            st.pop();
+        int n = nums.size();
+        vector<int> ans(n, -1);
+        stack<int> st;
 
-        if (!st.empty())
-            ans[i] = st.top();
-
-        st.push(arr[i]);
+        for (int i = 0; i < n; i++) {
+            // Remove all elements >= current element
+            while (!st.empty() && st.top() >= nums[i]) {
+                st.pop();
+            }
+            // Top is the nearest smaller element on the left
+            if (!st.empty()) {
+                ans[i] = st.top();
+            }
+            // Current element may be PSE for future elements
+            st.push(nums[i]);
+        }
+        return ans;
     }
-
-    return ans;
-}
-
+};
 /*
 COMPLEXITY ANALYSIS:
 - The time complexity of this approach is O(N), where N is the length of the input array `a`. We iterate through the array once.
