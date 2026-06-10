@@ -21,27 +21,33 @@ APPROACH:
 4. Return the maximum length of the substring (ans).
 
 CODE:*/
-int characterReplacement(string s, int k) {
-    unordered_set<char> ltrs;
-    for(auto it : s)
-        ltrs.insert(it);
-    int ans = 0;
-    for(auto ltr : ltrs) {
-        int start = 0, ltrCnt = 0;
-        for(int i = 0; i < s.size(); i++) {
-            if(s[i] == ltr)
-                ltrCnt++;
-            while((i - start + 1) - ltrCnt > k) {
-                if(s[start] == ltr)
-                    ltrCnt--;
-                start++;
+class Solution {
+public:
+    int characterReplacement(string s, int k) {
+        vector<int> freq(26, 0);
+
+        int left = 0, right = 0;
+        int maxFreq = 0;
+        int best = 0;
+
+        while (right < s.size()) {
+            char c = s[right++];
+            freq[c - 'A']++;
+
+            maxFreq = max(maxFreq, freq[c - 'A']);
+
+            // shrink if invalid
+            while (right - left - maxFreq > k) {
+                freq[s[left] - 'A']--;
+                left++;
             }
-            if((i - start + 1) - ltrCnt <= k)
-                ans = max(ans, i - start + 1);
+
+            best = max(best, right - left);
         }
+
+        return best;
     }
-    return ans;
-}
+};
 /*
 COMPLEXITY ANALYSIS:
 - Time complexity: O(N * L), where N is the length of the string s and L is the number of unique letters in the string. We iterate through the string and perform the sliding window operation for each unique letter.
