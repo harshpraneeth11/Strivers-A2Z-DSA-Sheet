@@ -37,13 +37,20 @@ ab*c+ 			((a*b)+c)
 come from begining and if alphanum, push to stack 
 if operator, pop 2 and push the ( + a + op + b + ) into stack
 
+
 prefix to postfix
 *-A/BC-/AKL		ABC/-AK/L-*
 Come from end and if alphanum, push 'alphanum' to stack 
 if operator, pop 2 and push the a + b + op into stack
+op a b => a b op
 
 postfix to prefix 
 ABC/-AK/L-*		*-A/BC-/AKL
 come from beginning and if alphanum, push 'alphanum' to stack 
 if operator, pop 2 and push the op + a + b into stack, no brackets are involved
+a b op => op a b
 
+prefix means come from back, postfix means come from front
+to put to prefix => op a b, infix => a op b, pfix => a b op
+In these 4, we insert characters into stack 
+from infix to prefix, postfix is different
