@@ -19,24 +19,42 @@ The top of the stack at each iteration will hold the next greater element for th
 CODE:*/
 
 // NOTE:- we could also implement this via two for loops from n-1 to 0, instead of a single loop of 2*n to 0; cause the complexity remains the same
+// nums = [2, 1, 2, 4, 3] [2, 1, 2, 4, 3]
+// ans  = [4  2  4 -1  4] [4  2  4 -1 -1]
 
-vector<int> nextGreaterElements(vector<int>& nums) {
-    vector<int> ans(nums.size(), -1);
-    stack<int> st;
+// in previous question, we have query vector / nums 1 and nums 2
+// Here, we have only nums2
 
-    for (int i = 2 * nums.size() - 1; i >= 0; i--) {
-        while (!st.empty() && nums[st.top()] <= nums[i % nums.size()])
-            st.pop();
-        
-        if (!st.empty())
-            ans[i % nums.size()] = nums[st.top()];
-        
-        st.push(i % nums.size());
+class Solution {
+public:
+    vector<int> nextGreaterElements(vector<int>& nums) {
+
+        int n = nums.size();
+        vector<int> ans(n, -1);
+        stack<int> st;
+
+        // Traverse twice to simulate circular array
+        for (int i = 2 * n - 1; i >= 0; i--) {
+
+            // Remove smaller/equal elements
+            while (!st.empty() && st.top() <= nums[i % n]) {
+                st.pop();
+            }
+
+            // Fill answer only during second pass
+            if (i < n) {
+                if (!st.empty()) {
+                    ans[i] = st.top();
+                }
+            }
+
+            // Current element may be NGE for elements on the left
+            st.push(nums[i % n]);
+        }
+
+        return ans;
     }
-
-    return ans;
-}
-
+};
 /*
 COMPLEXITY ANALYSIS:
 - The time complexity of this approach is O(N), where N is the size of the input array `nums`. We iterate through the array twice: once to find the next greater element in the first pass and once to handle the circular nature of the array in the second pass.
