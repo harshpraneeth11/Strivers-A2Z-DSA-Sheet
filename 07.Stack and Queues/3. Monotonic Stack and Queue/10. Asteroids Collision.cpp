@@ -26,6 +26,10 @@ We have 4 cases
 <- 3   <- 4
 <- 3   4->
 
+* 4 -> 3 ->
+In this case, don't think that 4 is moving with more speed. Actually, it is size, not speed.
+All are movign at same speed.
+
 case 1,4 :- In the cases where current is right or stack is empty, we don't have a problem. We push it directly into stack
 case 2 :-   But, if stack is positive and current is bigger negative, we pop all the st.top elements
 Sp case :-  If both are equal, we pop it without pushing the new one
