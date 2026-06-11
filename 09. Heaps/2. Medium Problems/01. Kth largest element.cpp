@@ -19,6 +19,10 @@ The space complexity is O(k) as we need to store k elements in the min-heap.
 
 ** Keeping a min Heap and if we keep removing the top element (if a[i] > st.top) then at the end,
 we get k elements which are largest of all and the top has, kth largest
+
+** We use minHeap, because at the end, the 1st largest stays at bottom and 
+at the top will be kth largest
+
 */
 
 int findKthLargest(vector<int>& nums, int k) {
