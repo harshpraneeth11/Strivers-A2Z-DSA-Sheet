@@ -119,7 +119,8 @@ int deleteRoot(vector<int>& arr) {
 // Increase Key (For Max-Heap)
 
 // Increasing the value of an element and then maintaining the heap property by moving up.
-// We do decrease key for minHeap and we move up 
+// We do decrease key for check the property is valid or not with children
+// For minHeap, decreasing key makes moving up and increasing key makes moving down
 
 void increaseKey(vector<int>& arr, int i, int new_val) {
     arr[i] = new_val;
@@ -129,12 +130,17 @@ void increaseKey(vector<int>& arr, int i, int new_val) {
     }
 }
 
+void decreaseKey(vector<int>& arr, int i, int new_val) {
+    arr[i] = new_val;
+    heapify(arr, arr.size(), i);
+}
 // ________________________________________
 
 // Heap Sort (Using Max-Heap)
 
 // Heap sort is performed by building a max-heap and then repeatedly moving the root to the end of the array.
 
+// last line is the main step
 void heapSort(vector<int>& arr) {
     int n = arr.size();
 
@@ -147,6 +153,6 @@ void heapSort(vector<int>& arr) {
         swap(arr[0], arr[i]);
 
         // Call maxHeapify on the reduced heap
-        maxHeapify(arr, i, 0);          // In general i=n, but here we used i=n-1, so it won't consider the last element during maxHeap
+        maxHeapify(arr, i, 0);          // ** In general i=n, but here we used i=n-1, so it won't consider the last element during maxHeap
     }
 }
