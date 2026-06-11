@@ -11,6 +11,7 @@ The largest rectangle is shown in the red area, which has an area = 10 units.
 */
 
 // Brute force approach - TC : O(N^2) and SC : O(1)
+// For every i -> j, we do minHeight * width
 
 int largestarea(int arr[], int n) {
   int maxArea = 0;
@@ -44,7 +45,7 @@ vector<int> prevSmaller(vector<int>& arr) {
     stack<int> st;
     vector<int> ans(arr.size(), -1);
     for (int i = 0; i < arr.size(); i++) {
-        while (!st.empty() && arr[st.top()] > arr[i])
+        while (!st.empty() && arr[st.top()] > arr[i])    // only one is >, another is >=
             st.pop();
         if (!st.empty())
             ans[i] = st.top();
@@ -72,7 +73,7 @@ int largestRectangleArea(vector<int>& heights) {
 
     int ans = INT_MIN;
     for (int i = 0; i < heights.size(); i++) {
-        ans = max(ans, (next[i] - prev[i] - 1) * heights[i]);
+        ans = max(ans, (next[i] - prev[i] - 1) * heights[i]);    
     }
     return ans;
 }
@@ -91,6 +92,8 @@ Push the current index to the stack as it might form a larger rectangle.
 
 Case 2: cur < st.top()
 Pop bars from the stack and calculate the area for the popped bar using the difference between the current index and the index of the new top of the stack.
+Because: A smaller bar blocks the rectangle extension of taller bars.
+So taller bars must end here.
 
 Case 3: After processing all bars, there may still be bars left in the stack:
 Pop the remaining bars and calculate the area for each, considering the width as the total width from the start to the end of the histogram.
