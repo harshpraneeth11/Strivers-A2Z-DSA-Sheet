@@ -49,47 +49,58 @@ ans += (leftElements * rightElements * arr[i])
 
 */
 
-vector<int> prevSmaller(vector<int>& arr){
-    stack<int> st;
-    vector<int> ans(arr.size(), -1);
-    for(int i = 0; i < arr.size(); i++){
-        while(!st.empty() && arr[st.top()] > arr[i])      // Only one side > and other side >=
-            st.pop();
-        if(!st.empty())
-            ans[i] = st.top();
-        st.push(i);
-    }
-    return ans;
-}
+class Solution {
+public:
+    vector<int> prevSmaller(vector<int>& arr) {
+        stack<int> st;
+        int n = arr.size();
+        vector<int> ans(n, -1);
 
-vector<int> nextSmaller(vector<int>& arr){
-    stack<int> st;
-    vector<int> ans(arr.size(), arr.size());
-    for(int i = arr.size()-1; i >= 0; i--){
-        while(!st.empty() && arr[st.top()] >= arr[i])
-            st.pop();
-        if(!st.empty())
-            ans[i] = st.top();
-        st.push(i);
-    }
-    return ans;
-}
+        for (int i = 0; i < n; i++) {
+            while (!st.empty() && arr[st.top()] > arr[i])   // one is > and other is >=
+                st.pop();
 
-int sumSubarrayMins(vector<int>& arr) {
-    vector<int> prevS = prevSmaller(arr);
-    vector<int> nextS = nextSmaller(arr);
-    long long ans = 0;
-    int mod = 1e9 + 7;
-
-    for(int i = 0; i < arr.size(); i++){
-        long long leftElements = i - prevS[i];      // leftElements = i - prevS[i]; There is no +1 here
-        long long rightElements = nextS[i] - i;
-        // this formula is arrived by mathematical calculation
-        ans += ((leftElements % mod) * (rightElements % mod) * (arr[i] % mod)) % mod;
+            if (!st.empty()) ans[i] = st.top();
+            st.push(i);
+        }
+        return ans;
     }
 
-    return (int)ans;
-}
+    vector<int> nextSmaller(vector<int>& arr) {
+        stack<int> st;
+        int n = arr.size();
+        vector<int> ans(n, n);
+
+        for (int i = n - 1; i >= 0; i--) {
+            while (!st.empty() && arr[st.top()] >= arr[i])  // one is > and other is >=
+                st.pop();
+
+            if (!st.empty())  ans[i] = st.top();
+            st.push(i);
+        }
+        return ans;
+    }
+
+    int sumSubarrayMins(vector<int>& arr) {
+        const int mod = 1e9 + 7;
+        int n = arr.size();
+
+        vector<int> prevS = prevSmaller(arr);
+        vector<int> nextS = nextSmaller(arr);
+
+        long long ans = 0;
+
+        for (int i = 0; i < n; i++) {
+            long long leftEle = i - prevS[i];   // it is not r-l+1, only r-l
+            long long rightEle = nextS[i] - i;
+
+            long long contribution = ((leftEle * rightEle) % mod * arr[i]) % mod;
+            ans = (ans + contribution) % mod;
+           // ans = ans + (leftEle * rightEle * arr[i])
+        }
+        return (int)ans;
+    }
+};
 
 /*
 COMPLEXITY ANALYSIS:
