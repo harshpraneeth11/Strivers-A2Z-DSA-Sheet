@@ -49,6 +49,11 @@ ans += (leftElements * rightElements * arr[i])
 
 */
 
+// prevSmaller checking starts from left side 
+//    and removes the st.top() elements if current is smaller than them
+// nextSmaller checking starts from right side
+//    and removes the st.top() elements if current is larger than them
+
 class Solution {
 public:
     vector<int> prevSmaller(vector<int>& arr) {
