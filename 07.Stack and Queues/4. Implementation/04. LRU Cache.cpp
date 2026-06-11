@@ -45,6 +45,8 @@ IMPLEMENTATION:
 CODE:
 */
 
+// the question itself tells to have (key, value), so we have pair<int, int> as nodes in lru list
+
 class LRUCache {
 private:
     int capacity;
@@ -192,14 +194,14 @@ public:
     // Retrieve the value of the key if it exists in the cache
     int get(int key) {
         if(m.find(key) != m.end()){
-            Node* resNode = m[key];     
-            int ans = resNode -> val;
+            Node* resNode = m[key];       // find node    
+            int ans = resNode -> val;     // find value
 
-            m.erase(key); // Remove the current mapping
-            deleteNode(resNode); // Remove the node from the list
-            addNode(resNode); // Move the node to the front (most recently used)
-
-            m[key] = head -> next; // Update the map with the new position
+            m.erase(key);                 // Remove the current mapping
+            deleteNode(resNode);          // Remove the node from the list
+            addNode(resNode);             // Move the node to the front (most recently used)
+            m[key] = head -> next;        // Update the map with the new position
+           
             return ans;
         }
         return -1; // Key not found
@@ -207,12 +209,13 @@ public:
     
     // Add or update the value of the key in the cache
     void put(int key, int value) {
-        if(m.find(key) != m.end()){
-            Node* curr = m[key];
+        if(m.find(key) != m.end()){       // if it exists
+            Node* curr = m[key];      // find node, we don't value as anyways we update it
             m.erase(key); // Remove the existing mapping
             deleteNode(curr); // Remove the node from the list
         }
 
+        // The same 4 lines as above with a condition
         // If the cache is full, remove the least recently used node
         if(m.size() == cap){
             m.erase(tail -> prev -> key); // Remove the least recently used key
