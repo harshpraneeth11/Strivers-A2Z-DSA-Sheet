@@ -10,49 +10,53 @@ Explanation: Remove the three digits 4, 3, and 2 to form the new number 1219 whi
 */
 
 /*
-APPROACH:
-The idea is to use a stack to build the smallest number by removing larger digits.
-We iterate through each digit in num and compare it with the digits in the stack.
-If the current digit is smaller than the top of the stack, we pop elements from the stack and keep the smaller element only in stack. It will be maxHeap kind
-until either the stack is empty or the top of the stack is smaller than or equal to the current digit.
-After processing all the digits, we remove any remaining digits from the stack to satisfy the required k digits to remove. Here, the top ones will be of more valued. So, remove them
-Finally, we construct the result by popping elements from the stack and reverse it to get the correct order.
-We remove the leading zeroes. If the answer is now empty, then return 0 -- base case
+num = "1432219", k = 3
+
+1
+14
+1 (pop 4), push 3 → 13
+1 (pop 3), push 2 → 12
+122
+12 (pop 2), push 1 → 121
+1219
+
+Answer = 1219
+
+When a smaller digit arrives, we remove larger digits before it because:
+A smaller digit appearing earlier always produces a smaller overall number: 
+1 3 2 and k = 1: 1 2 is better than 1 3
 */
 
-string removeKdigits(string num, int k) {
-    stack<char> st;
-    
-    for (char c : num) {
-        while (!st.empty() && k > 0 && st.top() > c) {
-            st.pop();
+class Solution {
+public:
+    string removeKdigits(string num, int k) {
+        string st;         // we are using a string that functions as stack directly
+
+        // Monotonic Stack + Greedy removal.
+        for (char digit : num) {
+            while (!st.empty() && k > 0 && st.back() > digit) {
+                st.pop_back();
+                k--;
+            }
+            st.push_back(digit);
+        }
+
+        // If removals are still left -- 12345 and k = 1, remove the last digit
+        while (k > 0) {
+            st.pop_back();
             k--;
         }
-        st.push(c);
-    }
-    
-    // Remove remaining digits from the back if k is still greater than 0
-    while (!st.empty() && k > 0) {
-        st.pop();
-        k--;
-    }
-    
-    // Construct the result by popping elements from the stack
-    string ans;
-    while (!st.empty()) {
-        ans.push_back(st.top());
-        st.pop();
-    }
-    
-    // Remove leading zeros
-    reverse(ans.begin(), ans.end());
-    while (!ans.empty() && ans.back() == '0') {
-        ans.pop_back();
-    }
-    
-    return ans.empty() ? "0" : ans;
-}
 
+        // Remove leading zeros          
+        // 1 2 0 0 1 -> if we remove 1 2, then 0 0 1, we have to remove those 0's
+        int i = 0;
+        while (i < st.size() && st[i] == '0')
+            i++;
+
+        string ans = st.substr(i);
+        return ans.empty() ? "0" : ans;
+    }
+};
 /*
 Complexity Analysis:
 - The code iterates through each digit in the input string, so the time complexity is O(n),
