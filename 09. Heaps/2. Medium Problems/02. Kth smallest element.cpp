@@ -21,6 +21,9 @@ The space complexity is O(K) as we need to store K elements in the max-heap.
 we get k elements which are smallest of all and the top has, kth smallest
 */
 
+// TC : O(K log K) + O((N - K) log K)  = O(N log K)
+// SC : O(K)
+
 int findKthSmallest(vector<int>& arr, int K) {
     priority_queue<int> pq;
     for (int i = 0; i < K; i++) {
@@ -34,3 +37,19 @@ int findKthSmallest(vector<int>& arr, int K) {
     }
     return pq.top();
 }
+
+// ____________________________________
+
+// TC : O(n + k log n)
+// Building heap: O(n)   and   k-1 pops: O(k log n)
+
+priority_queue<int, vector<int>, greater<int>> pq;
+
+for (int x : nums) {
+    pq.push(x);
+
+    if (pq.size() > k)
+        pq.pop();
+}
+
+return pq.top();
