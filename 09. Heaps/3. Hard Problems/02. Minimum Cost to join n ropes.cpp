@@ -28,8 +28,7 @@ Complexity Analysis:
 Code:
 */
 
-long long connectRopes(int* arr, int n)
-{
+long long connectRopes(int* arr, int n) {
     long long ans = 0;
     priority_queue<int, vector<int>, greater<int>> pq;
     
