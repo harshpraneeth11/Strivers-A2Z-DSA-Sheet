@@ -39,23 +39,51 @@ void solve(int i, int k, int tar, vector<int>& nums, vector<int>& temp, vector<v
     if (i == nums.size() || tar < 0)
         return;
 
+   // take
     if (nums[i] <= tar) {
         temp.push_back(nums[i]);
         solve(i + 1, k, tar - nums[i], nums, temp, ans);
         temp.pop_back();
     }
-
+   // not take
     solve(i + 1, k, tar, nums, temp, ans);
 }
 
 vector<vector<int>> combinationSum3(int k, int n) {
-    vector<int> nums;
-    for (int i = 1; i <= 9; i++) {
-        nums.push_back(i);
+    vector<int> nums = {1,2,3,4,5,6,7,8,9};
+    vector<vector<int>> ans;
+    vector<int> temp;
+    solve(0, k, n, nums, temp, ans);
+    return ans;
+}
+
+// __________________________________________________
+
+void solve(int start, int k, int tar, vector<int>& nums, vector<int>& temp, vector<vector<int>>& ans) {
+
+    if (tar == 0 && temp.size() == k) {
+        ans.push_back(temp);
+        return;
     }
+
+    if (temp.size() > k || tar < 0) 
+        return;
+
+    for (int i = start; i < nums.size(); i++) {
+        if (nums[i] > tar) break; // pruning since sorted
+
+        temp.push_back(nums[i]);
+        solve(i + 1, k, tar - nums[i], nums, temp, ans);
+        temp.pop_back();
+    }
+}
+
+vector<vector<int>> combinationSum3(int k, int n) {
+    vector<int> nums = {1,2,3,4,5,6,7,8,9};
 
     vector<vector<int>> ans;
     vector<int> temp;
+
     solve(0, k, n, nums, temp, ans);
     return ans;
 }
