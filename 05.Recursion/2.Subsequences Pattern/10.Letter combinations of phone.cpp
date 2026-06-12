@@ -53,4 +53,13 @@ vector<string> letterCombinations(string digits) {
 }
 // ______________________________________________
 
-// We can't do using take, not take approach here. Because, here we have to take at each step, thus we use for loop
+/*
+For phone digits:
+
+2 → abc
+3 → def
+
+At each index:
+   you are NOT deciding include/exclude
+   you are choosing exactly ONE option from many
+*/
