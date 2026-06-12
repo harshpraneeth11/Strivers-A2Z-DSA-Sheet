@@ -21,26 +21,23 @@ SPACE COMPLEXITY:
 The space complexity is O(1) as no extra space is used in the conversion process.
 */
 
-void heapify(vector<int>& arr, int node) {
+void heapify(vector<int>& arr, int node, int n) {
     int left = (2 * node) + 1;
     int right = (2 * node) + 2;
     int largest = node;
-    int n = arr.size();
 
-    if (left < n && arr[left] > arr[largest])
-        largest = left;
+    if (left < n && arr[left] > arr[largest]) largest = left;
 
-    if (right < n && arr[right] > arr[largest])
-        largest = right;
+    if (right < n && arr[right] > arr[largest]) largest = right;
 
     if (largest != node) {
         swap(arr[node], arr[largest]);
-        heapify(arr, largest);
+        heapify(arr, largest, n);
     }
 }
 
 void convertMinToMaxHeap(vector<int>& arr, int N) {
     for (int i = (N / 2) - 1; i >= 0; i--) {
-        heapify(arr, i);
+        heapify(arr, i, N);
     }
 }
