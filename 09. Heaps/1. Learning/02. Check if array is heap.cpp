@@ -21,13 +21,16 @@ The space complexity is O(N) due to the recursive calls in the solve function.
 */
 
 bool solve(int a[], int node, int n) {
-    if (node >= n)
-        return true;
+    if (node >= n) return true;
 
-    int left = (2 * node) + 1;
-    int right = (2 * node) + 2;
+    int left = 2 * node + 1;
+    int right = 2 * node + 2;
 
-    return (solve(a, left, n) && solve(a, right, n) && (a[node] > a[left] && a[node] > a[right]));
+    // check left and right child
+    if (left < n && a[node] < a[left]) return false;
+    if (right < n && a[node] < a[right]) return false;
+
+    return solve(a, left, n) && solve(a, right, n);
 }
 
 bool isMaxHeap(int a[], int n) {
