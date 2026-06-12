@@ -55,3 +55,31 @@ vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
     solve(0, candidates, target, temp, ans);
     return ans;
 }
+
+// __________________________________________________________
+
+class Solution {
+public:
+    void solve(int start, vector<int>& candidates, int target, vector<int>& temp, vector<vector<int>>& ans) {
+        if (target == 0) {
+            ans.push_back(temp);
+            return;
+        }
+
+        for (int i = start; i < candidates.size(); i++) {
+            if (candidates[i] > target) break; // pruning
+            temp.push_back(candidates[i]);
+            // i (not i+1) because reuse is allowed
+            solve(i, candidates, target - candidates[i], temp, ans);
+            temp.pop_back();
+        }
+    }
+
+    vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
+        sort(candidates.begin(), candidates.end());
+        vector<vector<int>> ans;
+        vector<int> temp;
+        solve(0, candidates, target, temp, ans);
+        return ans;
+    }
+};
