@@ -17,79 +17,59 @@ Input: board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], word = "
 Output: false
 
 
-Approach:
-We can use a backtracking approach to solve this problem.
-1. Create a helper function called 'solve' that takes the current row index, column index, letter index, the target word, and the board.
-2. In the 'solve' function:
-   - If the letter index is equal to the length of the target word, set the flag to true and return.
-   - Check if the current cell value is equal to the target letter.
-   - If it is, mark the current cell as visited (by changing its value to '!') and recursively call the 'solve' function for its neighboring cells (up, down, left, and right).
-   - After the recursive call, restore the original value of the current cell.
-3. Create the main function called 'exist' that calculates and returns true if the word exists in the grid, false otherwise.
-   - Initialize a flag variable to false.
-   - Iterate through each cell in the grid.
-   - If the current cell value is equal to the first letter of the target word, mark the current cell as visited (by changing its value to '!') and call the 'solve' function with the current cell's coordinates, letter index as 1, the target word, and the board.
-   - If the flag is true, return true (word exists in the grid).
-   - If the loop completes without finding the word, return false.
-   
-Time Complexity: O(M * N * 4^L), where M is the number of rows, N is the number of columns in the grid, and L is the length of the target word. In the worst case, we traverse the entire grid for each letter in the target word, and we have 4 choices (up, down, left, right) at each step.
-Space Complexity: O(L), where L is the length of the target word. The space is used for the recursive call stack.
+TC : O(M × N × 4 × 3^(L-1))
+Usually written as: O(M × N × 3^L)
+Why?
+We can start from every cell: M × N
+From the first character, there are at most 4 directions: 4
+After moving to a neighboring cell, we cannot go back to the previous cell (it's marked visited), so each next step has at most 3 choices: 
+3 × 3 × 3 ... (L-1 times) = 3^(L-1)
 
 CODE:*/
 
-// Note:- I'm making recursive call only for the potential grids rather than making call for the all four to reduce unwanted calls,
-// this makes code quite big but if you want to make it compact you could make call for all four cases and after call check if it's valid
-// just check the code of rat in maze for shorter code
+class Solution {
+public:
+    // {i, j} are in the board and [idx] is in word
+    bool dfs(int i, int j, int idx, vector<vector<char>>& board, string& word) {
 
-// ** Here, m*n is for 'for' loop, then 4^L for each cell in the worst case
+        // All characters matched
+        if (idx == word.size()) return true;
 
-bool flag = false;
+        int m = board.size();
+        int n = board[0].size();
 
-void solve(int i, int j, int ltr, string& word, vector<vector<char>>& board) {
-    if (ltr == word.size()) {
-        flag = true;
-        return;
+        // Out of bounds or character mismatch
+        if (i < 0 || i >= m || j < 0 || j >= n || board[i][j] != word[idx])
+            return false;
+
+        // The letter matched, so lets make this visited (!) and check next letter
+        char ch = board[i][j];
+        board[i][j] = '!';
+
+        // Explore all 4 directions
+        bool found =
+            dfs(i + 1, j, idx + 1, board, word) ||
+            dfs(i - 1, j, idx + 1, board, word) ||
+            dfs(i, j + 1, idx + 1, board, word) ||
+            dfs(i, j - 1, idx + 1, board, word);
+
+        // Backtrack
+        board[i][j] = ch;
+
+        return found;
     }
 
-    // left
-    if (j - 1 >= 0 && board[i][j - 1] == word[ltr]) {
-        board[i][j - 1] = '!';
-        solve(i, j - 1, ltr + 1, word, board);
-        board[i][j - 1] = word[ltr];
-    }
-    // right
-    if (j + 1 < board[0].size() && board[i][j + 1] == word[ltr]) {
-        board[i][j + 1] = '!';
-        solve(i, j + 1, ltr + 1, word, board);
-        board[i][j + 1] = word[ltr];
-    }
-    // top
-    if (i - 1 >= 0 && board[i - 1][j] == word[ltr]) {
-        board[i - 1][j] = '!';
-        solve(i - 1, j, ltr + 1, word, board);
-        board[i - 1][j] = word[ltr];
-    }
-    // bottom
-    if (i + 1 < board.size() && board[i + 1][j] == word[ltr]) {
-        board[i + 1][j] = '!';
-        solve(i + 1, j, ltr + 1, word, board);
-        board[i + 1][j] = word[ltr];
-    }
-}
+    bool exist(vector<vector<char>>& board, string word) {
+        int m = board.size();
+        int n = board[0].size();
 
-bool exist(vector<vector<char>>& board, string word) {
-    flag = false;
-
-    for (int i = 0; i < board.size(); i++) {
-        for (int j = 0; j < board[0].size(); j++) {
-            if (board[i][j] == word[0]) {
-                board[i][j] = '!';
-                solve(i, j, 1, word, board);
-                board[i][j] = word[0];
-                if (flag)
-                    return true;
+        // Try starting the word from every cell
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (dfs(i, j, 0, board, word)) return true;
             }
         }
+
+        return false;
     }
-    return false;
-}
+};
