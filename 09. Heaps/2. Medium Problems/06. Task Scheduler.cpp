@@ -32,18 +32,21 @@ The space complexity is O(1) because the frequency map has a fixed number of uni
 */
 
 int leastInterval(vector<char>& tasks, int n) {
-    int siz = tasks.size();
-    unordered_map<char, int> mp;
-    for (auto it : tasks)
-        mp[it]++;
-    int maxfreq = INT_MIN;
-    for (auto it : mp)
-        maxfreq = max(maxfreq, it.second);
-    int ans = (maxfreq - 1) * (n + 1);
-    // number of elements having maxfreq
-    for (auto it : mp) {
-        if (it.second == maxfreq)
-            ans++;
-    }
-    return max(ans, siz);
+    vector<int> freq(26, 0);
+
+    for (char c : tasks)
+        freq[c - 'A']++;
+
+    int maxFreq = *max_element(freq.begin(), freq.end());
+    int countMax = 0;
+
+    for (int f : freq)
+        if (f == maxFreq)
+            countMax++;
+
+    int part1 = (maxFreq - 1) * (n + 1) + countMax;
+
+    // part1 : still some spaces left
+    // tasks.size() : it is filled completely with tasks in a neat order
+    return max((int)tasks.size(), part1);
 }
