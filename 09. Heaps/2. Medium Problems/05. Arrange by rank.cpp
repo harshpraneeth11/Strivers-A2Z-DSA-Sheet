@@ -2,6 +2,9 @@
 QUESTION:
 Given an array of integers arr, replace each element with its rank.
 
+Input: arr = [40,10,20,30]
+Output: [4,1,2,3]
+
 APPROACH:
 To assign ranks to the elements in the array, we can use a min-heap (priority queue) to sort the elements in ascending order along with their indices.
 1. Create a min-heap to store pairs of (element, index) in ascending order.
@@ -24,21 +27,25 @@ The space complexity is O(N) as we need to store N elements in the min-heap and 
 // Don't use sort, instead use PQ with (value, index) and pop one by one and keep value in index
 
 vector<int> arrayRankTransform(vector<int>& arr) {
-    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
+    priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>> pq;
+
     for (int i = 0; i < arr.size(); i++) {
         pq.push({arr[i], i});
     }
+
     vector<int> ans(arr.size());
     int rank = 0;
-    int prev = INT_MIN; // an arbitrary value which never matches
+    int prev = INT_MIN;
+
     while (!pq.empty()) {
-        auto top = pq.top();
+        auto [val, idx] = pq.top();
         pq.pop();
-        if (top.first != prev) {
-            rank++;
-        }
-        ans[top.second] = rank;
-        prev = top.first;
+
+        if (val != prev) rank++;        // we want rank, not row number
+
+        ans[idx] = rank;
+        prev = val;
     }
+
     return ans;
 }
