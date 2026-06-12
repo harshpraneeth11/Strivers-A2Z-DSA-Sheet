@@ -25,34 +25,53 @@ Explanation: There exist two distinct solutions to the 4-queens puzzle as shown 
 
 class Solution {
 public:
-    vector<vector<string>> ret;
+    vector<vector<string>> ans;
 
-    bool is_valid(vector<string>& board, int row, int col) {
-        for (int i = 0; i < row; ++i)
-            if (board[i][col] == 'Q' 
-                || (col - row + i >= 0 && board[i][col - row + i] == 'Q') 
-                || (col + row - i < board.size() && board[i][col + row - i] == 'Q') )  return false;
+    bool isValid(vector<string>& board, int row, int col) {
+        int n = board.size();
+
+        // Check column
+        for (int r = 0; r < row; r++) {
+            if (board[r][col] == 'Q')
+                return false;
+        }
+
+        // We need to check row-1 to above rows and columns also similarly 
+        // Check upper-left diagonal 
+        for (int r = row - 1, c = col - 1; r >= 0 && c >= 0; r--, c--) {
+            if (board[r][c] == 'Q')
+                return false;
+        }
+
+        // Check upper-right diagonal
+        for (int r = row - 1, c = col + 1; r >= 0 && c < n; r--, c++) {
+            if (board[r][c] == 'Q')
+                return false;
+        }
+
         return true;
     }
 
-    void dfs(vector<string>& board, int row) {
-        if (row == board.size()) {
-            ret.push_back(board);
+    void solve(int row, vector<string>& board) {
+        int n = board.size();
+
+        if (row == n) {
+            ans.push_back(board);
             return;
         }
-        for (int col = 0; col < board.size(); ++col) {
-            if (is_valid(board, row, col)) {
+
+        for (int col = 0; col < n; col++) {
+            if (isValid(board, row, col)) {
                 board[row][col] = 'Q';
-                dfs(board, row + 1);
+                solve(row + 1, board);
                 board[row][col] = '.';
             }
         }
     }
 
     vector<vector<string>> solveNQueens(int n) {
-        if (n <= 0) return {};
         vector<string> board(n, string(n, '.'));
-        dfs(board, 0);
-        return ret;
+        solve(0, board);
+        return ans;
     }
 };
