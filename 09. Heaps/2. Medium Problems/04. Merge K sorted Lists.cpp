@@ -19,8 +19,8 @@ The space complexity is O(K) as we need to store K nodes in the min-heap.
 */
 
 ListNode* mergeKLists(vector<ListNode*>& lists) {
-    // min Heap
-    priority_queue<pair<int, ListNode*>, vector<pair<int, ListNode*>>, greater<pair<int, ListNode*>>> pq;
+    priority_queue<pair<int, ListNode*>, vector<pair<int, ListNode*>>,
+        greater<pair<int, ListNode*>>> pq;        // min Heap
 
     for (int i = 0; i < lists.size(); i++) {
         if (lists[i]) {
@@ -32,13 +32,14 @@ ListNode* mergeKLists(vector<ListNode*>& lists) {
     ListNode* ans = dummy;
 
     while (!pq.empty()) {
-        auto top = pq.top();
+        auto [val, node] = pq.top();
         pq.pop();
-        dummy->next = new ListNode(top.first);
+
+        dummy->next = new ListNode(val);
         dummy = dummy->next;
-        ListNode* nxt = top.second->next;
-        if (nxt) {
-            pq.push({nxt->val, nxt});
+
+        if (node->next) {
+            pq.push({node->next->val, node->next});
         }
     }
 
