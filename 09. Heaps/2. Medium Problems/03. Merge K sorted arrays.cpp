@@ -24,26 +24,22 @@ typedef pair<int, pair<int, int>> triplet;
 
 vector<int> mergeKArrays(vector<vector<int>>& arr, int K) {
     priority_queue<triplet, vector<triplet>, greater<triplet>> pq;
-    
+
     for (int i = 0; i < K; i++) {
         pq.push({arr[i][0], {i, 0}});
     }
-    
     vector<int> mergedArray;
-    
+
     while (!pq.empty()) {
-        triplet mini = pq.top();
+        auto [val, pos] = pq.top();
         pq.pop();
-        
-        mergedArray.push_back(mini.first);
-        
-        int row = mini.second.first;
-        int col = mini.second.second;
-        
+
+        auto [row, col] = pos;
+        mergedArray.push_back(val);
+
         if (col + 1 < K) {
             pq.push({arr[row][col + 1], {row, col + 1}});
         }
     }
-    
     return mergedArray;
 }
