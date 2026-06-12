@@ -23,7 +23,7 @@ The space complexity is O(K) as we need to store K elements in the min-heap.
 typedef pair<int, pair<int, int>> triplet;
 
 vector<int> mergeKArrays(vector<vector<int>>& arr, int K) {
-    priority_queue<triplet, vector<triplet>, greater<triplet>> pq;      // mmin Heap
+    priority_queue<triplet, vector<triplet>, greater<triplet>> pq;      // min Heap
 
     for (int i = 0; i < K; i++) {
         pq.push({arr[i][0], {i, 0}});
