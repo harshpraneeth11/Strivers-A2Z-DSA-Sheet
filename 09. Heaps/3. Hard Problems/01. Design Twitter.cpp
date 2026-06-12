@@ -28,51 +28,62 @@ SPACE COMPLEXITY:
 The space complexity is O(U + P) where U is the number of users and P is the total number of posts. The posts map stores the tweets of each user, and the size of the posts map is bounded by the number of users. The maximum size of the posts deque for each user is 10.
 */
 
-unordered_map<int, vector<int>> following; // key = userId, value = followeeIds
-unordered_map<int, deque<pair<int, int>>> posts; // key = userId, value = posts corresponding to that userId
-int time;
+class Twitter {
+private:
+    unordered_map<int, vector<int>> following;  // userId → list of followees
+    unordered_map<int, deque<pair<int, int>>> posts;   // userId → (time, tweetId)
+    int time;
 
-Twitter() {
-    time = 0;
-}
+public:
+    Twitter() {
+        time = 0;
+    }
 
-void postTweet(int userId, int tweetId) {
-    following[userId].push_back(userId); // each user will follow themselves
+    void postTweet(int userId, int tweetId) {
+        following[userId].push_back(userId);    // user follows self
+        posts[userId].push_front({time, tweetId});          // store tweet
+        time++;
 
-    if (posts.find(userId) != posts.end() && posts[userId].size() > 10)
-        posts[userId].pop_back();
-
-    posts[userId].push_front({time, tweetId});
-    time++;
-}
-
-vector<int> getNewsFeed(int userId) {
-    vector<int> ans;
-    set<pair<int, int>, greater<pair<int, int>>> allposts;
-    for (int i = 0; i < following[userId].size(); i++) {
-        int followe = following[userId][i];
-        for (int i = 0; i < posts[followe].size(); i++) {
-            allposts.insert(posts[followe][i]);
+        // optional: keep only last 10 tweets per user
+        if (posts[userId].size() > 10) {
+            posts[userId].pop_back();
         }
     }
-    int siz = allposts.size();
-    int n = min(10, siz);
-    for (auto it = allposts.begin(); it != allposts.end() && n; it++) {
-        ans.push_back(it->second);
-        n--;
+
+    vector<int> getNewsFeed(int userId) {
+        vector<int> ans;
+
+        set<pair<int, int>> allposts;
+
+        // collect tweets from all followees
+        for (int followee : following[userId]) {
+            for (auto &p : posts[followee]) {
+                allposts.insert(p);
+            }
+        }
+
+        // iterate from end (newest first)
+        int count = 0;
+        for (auto it = allposts.rbegin(); it != allposts.rend() && count < 10; ++it) {
+            ans.push_back(it->second);
+            count++;
+        }
+
+        return ans;
     }
-    return ans;
-}
 
-void follow(int followerId, int followeeId) {
-    following[followerId].push_back(followeeId);
-}
+    void follow(int followerId, int followeeId) {   // followerId follows followeeId
+        following[followerId].push_back(followeeId);
+    }
 
-void unfollow(int followerId, int followeeId) {
-    for (int i = 0; i < following[followerId].size(); i++) {
-        if (following[followerId][i] == followeeId) {
-            following[followerId].erase(following[followerId].begin() + i);
-            return;
+    void unfollow(int followerId, int followeeId) {
+        auto &vec = following[followerId];
+
+        for (int i = 0; i < vec.size(); i++) {
+            if (vec[i] == followeeId) {
+                vec.erase(vec.begin() + i);     // erases only that element
+                break;
+            }
         }
     }
-}
+};
