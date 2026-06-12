@@ -51,3 +51,6 @@ vector<string> letterCombinations(string digits) {
     solve(0, digits, temp, ans, mp);
     return ans;
 }
+// ______________________________________________
+
+// We can't do using take, not take approach here. Because, here we have to take at each step, thus we use for loop
