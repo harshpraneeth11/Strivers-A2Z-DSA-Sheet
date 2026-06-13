@@ -21,27 +21,12 @@ The rat can reach the destination at
 and DDRDRR, when printed in sorted order 
 we get DDRDRR DRDDRR.
 
-Approach:
-We can use a backtracking approach to find all possible paths.
-1. Create a helper function called 'solve' that takes the current row index, column index, a string representing the current path, a vector of strings to store the paths, the matrix, and the size of the matrix.
-2. In the 'solve' function:
-   - If the current position is the destination (N-1, N-1), add the current path to the vector of paths and return.
-   - Check if the current position is valid and not a blocked cell.
-   - Mark the current position as visited (by setting its value to 0) to avoid revisiting it.
-   - Recursively call the 'solve' function for the neighboring cells (left, right, up, down) with the updated path.
-   - After the recursive calls, restore the original value of the current position to allow other paths to visit it.
-3. Create the main function called 'findPath' that calculates and returns all possible paths from (0, 0) to (N-1, N-1).
-   - If the source cell or the destination cell is blocked, return an empty vector.
-   - Initialize an empty vector of strings to store the paths.
-   - Call the 'solve' function with the initial position (0, 0), an empty path string, the vector of paths, the matrix, and the size of the matrix.
-   - Return the vector of paths.
-   
-Time Complexity: O(3^(N^2)), where N is the size of the matrix. In the worst case, each cell can have three possible neighboring cells to explore.
-// ** Note that it is not 4^(N^2)
-Space Complexity: O(N^2), as we are using a vector of strings to store the paths.
 
 CODE:*/
 
+// ___________________________________________________________________________
+
+// Type 2 : Print all paths
 // There can be more than 1 possible case
 bool isValid(int i, int j, vector<vector<int>>& m, int n) {
     if (i < 0 || i >= n || j < 0 || j >= n || m[i][j] == 0)
