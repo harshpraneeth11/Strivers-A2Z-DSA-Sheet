@@ -24,24 +24,19 @@ Time Complexity: O(N * sum), where N is the size of the array and sum is the giv
 Space Complexity: O(N * sum), where N is the size of the array and sum is the given sum (for recursion stack).
 
 CODE:*/
-int solve(int index, int sum, int arr[]) {
-	if (sum == 0) {
-		return 1;
-	}
-	if (index == 0) {
-		return (arr[0] == sum) ? 1 : 0;
-	}
+const int MOD = 1e9 + 7;
 
-	int include = 0;
-	if (arr[index] <= sum)
-		include = solve(index - 1, sum - arr[index], arr); // include
+int solve(int idx, int sum, int arr[]) {
+    if (sum == 0) return 1;
+    if (idx == 0) return arr[0] == sum;
 
-	int exclude = solve(index - 1, sum, arr); // exclude
+    int pick = 0;
+    if (arr[idx] <= sum) pick = solve(idx - 1, sum - arr[idx], arr);
 
-	return (include + exclude) % (int)(1e9 + 7);
+    int notPick = solve(idx - 1, sum, arr);
+    return (pick + notPick) % MOD;
 }
 
 int perfectSum(int arr[], int n, int sum) {
-	int cnt = solve(n - 1, sum, arr);
-	return cnt % (int)(1e9 + 7);
+    return solve(n - 1, sum, arr);
 }
