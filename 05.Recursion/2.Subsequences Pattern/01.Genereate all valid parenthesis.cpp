@@ -34,7 +34,7 @@ void solve(vector<string>& ans, string s, int open, int close, int n) {
 
 	if (open <= n)
 		solve(ans, s + '(', open + 1, close, n);
-	if (open > close)
+	if (open > close)			// Important
 		solve(ans, s + ')', open, close + 1, n);
 }
 
