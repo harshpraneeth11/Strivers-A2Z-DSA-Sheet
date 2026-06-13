@@ -43,8 +43,18 @@ We can solve the Sudoku puzzle using a backtracking approach.
 5. If the placement is not valid or we have reached the end of the board, backtrack by undoing the placement and trying the next digit.
 6. Repeat this process until we have filled all the cells or found a valid solution.
 
-Time Complexity: The time complexity of the backtracking algorithm for solving a Sudoku puzzle is O(9^(m*n)), where m and n are the number of rows and columns in the board. In the worst case, we have to try all possible combinations.
-Space Complexity: The space complexity is O(1) as we are using a constant amount of space for the board and temporary variables.
+Time Complexity: The time complexity of the backtracking algorithm for solving a Sudoku puzzle is 
+O(9^(m*n)), where m and n are the number of rows and columns in the board. 
+In the worst case, we have to try all possible combinations.
+Space Complexity: The space complexity is O(1) as we are using a constant amount of space for 
+the board and temporary variables.
+
+E = number of empty cells (max 81)
+isValid takes O(9) ≈ O(1)
+At each empty cell: up to 9 choices
+Depth: E empty cells
+So total states explored: 9^E
+TC : O(9^E). In the worst case, it is O(9^81)
 
 CODE:-*/
 
@@ -54,7 +64,7 @@ bool isValid(int row, int col, char digit, vector<vector<char>>& board) {
             return false;
         if (board[i][col] == digit)
             return false;
-        if (board[3 * (row / 3) + (i / 3)][3 * (col / 3) + (i % 3)] == digit)
+        if (board[3 * (row / 3) + (i / 3)][3 * (col / 3) + (i % 3)] == digit)    // Important
             return false;
     }
     return true;
@@ -67,8 +77,7 @@ bool solve(vector<vector<char>>& board) {
                 for (char digit = '1'; digit <= '9'; digit++) {
                     if (isValid(i, j, digit, board)) {
                         board[i][j] = digit;
-                        if (solve(board))
-                            return true;
+                        if (solve(board)) return true;
                         board[i][j] = '.';
                     }
                 }
