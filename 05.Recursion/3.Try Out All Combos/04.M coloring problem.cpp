@@ -1,5 +1,8 @@
 /*QUESTION:
-Given an undirected graph and an integer M. The task is to determine if the graph can be colored with at most M colors such that no two adjacent vertices of the graph are colored with the same color. Here coloring of a graph means the assignment of colors to all vertices. Print 1 if it is possible to colour vertices and 0 otherwise.
+Given an undirected graph and an integer M. The task is to determine if the graph can be colored with 
+at most M colors such that no two adjacent vertices of the graph are colored with the same color. 
+Here coloring of a graph means the assignment of colors to all vertices. Print 1 if it is possible 
+to colour vertices and 0 otherwise.
 
 Approach:
 We can solve this problem using backtracking.
@@ -23,33 +26,36 @@ Time Complexity: O(M^N), where M is the number of colors and N is the number of 
 Space Complexity: O(N), as we are using an array of colors to store the assigned colors for each vertex.
 
 CODE:*/
-bool isPossible(bool graph[101][101], int color[], int N, int col, int node) {
-    for (int k = 0; k < N; k++) {
-        if (k != node && graph[node][k] == 1 && color[k] == col)
-            return false;
-    }
-    return true;
-}
 
-bool solve(bool graph[101][101], int m, int N, int color[], int node) {
-    if (node == N)
-        return true;
+// m colors, N vertices, graph[i][j] means there is a edge
 
-    for (int i = 1; i <= m; i++) {
-        if (isPossible(graph, color, N, i, node)) {
-            color[node] = i;
-            if (solve(graph, m, N, color, node + 1))
-                return true;
-            color[node] = 0;
+class Solution {
+public:
+
+    // If there is an edge between node and k, then l and node should have different color
+    bool isPossible(bool graph[101][101], vector<int>& color, int N, int col, int node) {
+        for (int k = 0; k < N; k++) {
+            if (graph[node][k] && color[k] == col)
+                return false;
         }
-    }
-    return false;
-}
-
-bool graphColoring(bool graph[101][101], int m, int N) {
-    int color[N];
-    memset(color, 0, sizeof color);
-    if (solve(graph, m, N, color, 0))
         return true;
-    return false;
-}
+    }
+
+    bool solve(bool graph[101][101], int m, int N, vector<int>& color, int node) {
+        if (node == N) return true;
+
+        for (int c = 1; c <= m; c++) {
+            if (isPossible(graph, color, N, c, node)) {
+                color[node] = c;
+                if (solve(graph, m, N, color, node + 1)) return true;
+                color[node] = 0; // backtrack
+            }
+        }
+        return false;
+    }
+
+    bool graphColoring(bool graph[101][101], int m, int N) {
+        vector<int> color(N, 0);
+        return solve(graph, m, N, color, 0);    // start from node 0
+    }
+};
