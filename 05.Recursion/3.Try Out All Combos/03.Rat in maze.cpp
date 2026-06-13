@@ -1,5 +1,9 @@
 /*QUESTION:
-Consider a rat placed at (0, 0) in a square matrix of order N * N. It has to reach the destination at (N - 1, N - 1). Find all possible paths that the rat can take to reach from source to destination. The directions in which the rat can move are 'U'(up), 'D'(down), 'L' (left), 'R' (right). Value 0 at a cell in the matrix represents that it is blocked and rat cannot move to it while value 1 at a cell in the matrix represents that rat can be travel through it.
+Consider a rat placed at (0, 0) in a square matrix of order N * N. It has to reach the destination at 
+(N - 1, N - 1). Find all possible paths that the rat can take to reach from source to destination. 
+The directions in which the rat can move are 'U'(up), 'D'(down), 'L' (left), 'R' (right). 
+Value 0 at a cell in the matrix represents that it is blocked and rat cannot move to it 
+while value 1 at a cell in the matrix represents that rat can be travel through it.
 
 Example 1:
 
@@ -37,6 +41,8 @@ Time Complexity: O(3^(N^2)), where N is the size of the matrix. In the worst cas
 Space Complexity: O(N^2), as we are using a vector of strings to store the paths.
 
 CODE:*/
+
+// There can be more than 1 possible case
 bool isValid(int i, int j, vector<vector<int>>& m, int n) {
     if (i < 0 || i >= n || j < 0 || j >= n || m[i][j] == 0)
         return false;
