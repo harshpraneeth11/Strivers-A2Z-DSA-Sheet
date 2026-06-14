@@ -39,9 +39,7 @@ CODE:
 // Memoization
 int fmemo(int i, int val[], int wt[], int W, vector<vector<int>>& dp){
     if(i == 0){
-        if(W >= wt[i]){
-            return dp[i][W] = (W / wt[i]) * val[i];
-        }
+        if(W >= wt[i]) return dp[i][W] = (W / wt[i]) * val[i];
         else return dp[i][W] = 0;
     }
     
@@ -52,6 +50,11 @@ int fmemo(int i, int val[], int wt[], int W, vector<vector<int>>& dp){
     int notake = fmemo(i - 1, val, wt, W, dp);
     
     return dp[i][W] = max(take, notake);
+}
+
+int knapSack(int N, int W, int val[], int wt[]){
+    vector<vector<int>> dp(N, vector<int>(W + 1, -1));
+    return fmemo(N - 1, val, wt, W, dp);
 }
 
 // Tabulation
@@ -65,7 +68,7 @@ int ftab(int n, int val[], int wt[], int weight){
                 continue;
             }
             int take = INT_MIN;
-            if(W >= wt[i]) take = val[i]+dp[i][W-wt[i]];
+            if(W >= wt[i]) take = val[i]+dp[i][W-wt[i]];   // same { wt[i], val[i] } can be used again
             int notake = dp[i-1][W];
             dp[i][W] = max(take,notake);
         }
@@ -92,10 +95,4 @@ int fopt(int n, int val[], int wt[], int weight){
         prev = curr;
     }
     return dp[n-1][weight];
-}
-
-
-int knapSack(int N, int W, int val[], int wt[]){
-    vector<vector<int>> dp(N, vector<int>(W + 1, -1));
-    return fmemo(N - 1, val, wt, W, dp);
 }
