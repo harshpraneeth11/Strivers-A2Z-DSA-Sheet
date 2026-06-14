@@ -48,6 +48,13 @@ int fmemo(int i, int amt, vector<int>& coins, vector<vector<int>>& dp){
     return dp[i][amt] = min(take, notake);
 }
 
+int coinChange(vector<int>& coins, int amount) {
+    int n = coins.size();
+    vector<vector<int>> dp(n, vector<int>(amount + 1, -1));
+    int ans = fmemo(n - 1, amount, coins, dp);
+    return (ans == 1e9) ? -1 : ans;
+}
+
 // Tabulation
 int ftab(int n, int amount, vector<int>& coins){
     vector<vector<int>> dp(n,vector<int>(amount+1));
@@ -96,9 +103,3 @@ int fopt(int n, int amount, vector<int>& coins){
     return prev[amount];
 }
 
-int coinChange(vector<int>& coins, int amount) {
-    int n = coins.size();
-    vector<vector<int>> dp(n, vector<int>(amount + 1, -1));
-    int ans = fmemo(n - 1, amount, coins, dp);
-    return (ans == 1e9) ? -1 : ans;
-}
