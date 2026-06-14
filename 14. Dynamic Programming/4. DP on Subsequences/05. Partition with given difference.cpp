@@ -40,22 +40,41 @@ CODE:
 */
 
 
-const int mod = 1e9 + 7;
+// Understand the usage of mod
 
 // Memoization
-int fmemo(int i, int tar, int arr[], vector<vector<int>>& dp){
-    if(i == 0){
-        if(tar == 0 && arr[i] == 0) return dp[i][tar] = 2;
-        if(tar == 0) return dp[i][tar] = 1;
-        return dp[i][tar] = (arr[i] == tar);
+int mod = 1e9 + 7;
+
+int fmemo(int i, int tar, vector<int>& arr, vector<vector<int>>& dp) {
+    if (i == 0) {
+        if (tar == 0 && arr[i] == 0) return 2;
+        if (tar == 0 || tar == arr[i]) return 1;
+        return 0;
     }
 
-    if(dp[i][tar] != -1) return dp[i][tar];
+    if (dp[i][tar] != -1) return dp[i][tar];
+
+    int notake = fmemo(i - 1, tar, arr, dp) % mod;          
 
     int take = 0;
-    if(arr[i] <= tar) take = fmemo(i - 1, tar - arr[i], arr, dp);
-    int notake = fmemo(i - 1, tar, arr, dp);
+    if (arr[i] <= tar) take = fmemo(i - 1, tar - arr[i], arr, dp) % mod;
+
     return dp[i][tar] = (take + notake) % mod;
+}
+
+int countPartitions(int n, int d, vector<int>& arr) {
+    int totalSum = 0;
+    for (int i = 0; i < n; i++) totalSum += arr[i];
+
+    // invalid case
+    if (totalSum < d || (totalSum + d) % 2 != 0)
+        return 0;
+
+    int target = (totalSum + d) / 2;
+
+    vector<vector<int>> dp(n, vector<int>(target + 1, -1));
+
+    return fmemo(n - 1, target, arr, dp);
 }
 
 // Tabulation
@@ -98,19 +117,4 @@ int fopt(int n, int sum, int arr[]){
         prev = curr;
     }
     return prev[sum];
-}
-
-int countPartitions(int n, int d, vector<int>& arr) {
-    int sum = 0, ans = 0;
-    for(auto i:arr) sum += i;
-    vector<vector<int>> dp(n, vector<int>(sum + 1, -1));
-    for(int i = 0; i <= sum; i++){
-        if(i - (sum - i) == d)
-            ans = (ans + fmemo(n - 1, i, arr, dp)) % mod;      // There is only one 'i' possible for this
-    }
-    // if (totSum-d < 0) return 0;
-    // if ((totSum-d) % 2 == 1) return 0;
-    // k = (sum - d ) / 2
-    // ans = fmemo(n-1, k, arr, dp) % mod ; 
-    return ans;
 }
