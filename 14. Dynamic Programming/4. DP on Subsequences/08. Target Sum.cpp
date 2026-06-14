@@ -32,10 +32,9 @@ int helper(int idx, int tgt, vector<int>& nums, vector<vector<int>>& memo) {
     if (memo[idx][tgt] != -1)      return memo[idx][tgt];
 
     int exclude = helper(idx - 1, tgt, nums, memo);
+    
     int include = 0;
-    if (nums[idx] <= tgt)
-        include = helper(idx - 1, tgt - nums[idx], nums, memo);
-
+    if (nums[idx] <= tgt) include = helper(idx - 1, tgt - nums[idx], nums, memo);
     return memo[idx][tgt] = (exclude + include);
 }
 
@@ -54,7 +53,9 @@ int findWays(int n, int tgt, vector<int>& nums) {
 }
 __________________________________
 
-// Tabulation
+
+// ----------------------------------------------------------------------
+// DP (2D version)
 
 const int mod = 1e9 + 7;
 
@@ -62,55 +63,64 @@ int countWays(vector<int>& nums, int targetSum) {
     int n = nums.size();
     vector<vector<int>> dp(n, vector<int>(targetSum + 1, 0));
 
-    dp[0][0] = nums[0] == 0 ? 2 : 1;
-    if (nums[0] <= targetSum && nums[0] != 0) dp[0][nums[0]] = 1;
+    // base case
+    if (nums[0] == 0) {
+        dp[0][0] = 2;
+    } else {
+        dp[0][0] = 1;
 
-    for (int i = 1; i < n; ++i) {
-        for (int sum = 0; sum <= targetSum; ++sum) {
-            dp[i][sum] = (dp[i - 1][sum] + (nums[i] <= sum ? dp[i - 1][sum - nums[i]] : 0)) % mod;
+        if (nums[0] <= targetSum) {
+            dp[0][nums[0]] = 1;
+        }
+    }
+
+    for (int i = 1; i < n; i++) {
+        for (int sum = 0; sum <= targetSum; sum++) {
+            int notTake = dp[i - 1][sum];
+            
+            int take = 0;
+            if (nums[i] <= sum) {
+                take = dp[i - 1][sum - nums[i]];
+            }
+            dp[i][sum] = (notTake + take) % mod;
         }
     }
     return dp[n - 1][targetSum];
 }
 
-int findTargetSumWays(int n, int target, vector<int>& nums) {
-    int totalSum = accumulate(nums.begin(), nums.end(), 0);
-    if (totalSum < target || (totalSum - target) % 2 != 0) return 0;
-    return countWays(nums, (totalSum - target) / 2);
-}
-______________________________________
 
-// Space optimization
+// ----------------------------------------------------------------------
+// Space Optimized (1D version)
 
 const int mod = 1e9 + 7;
 
-int calculateWays(vector<int>& nums, int targetSum) {
+int countWays(vector<int>& nums, int targetSum) {
     int n = nums.size();
     vector<int> prev(targetSum + 1, 0);
 
-    if (nums[0] == 0)    prev[0] = 2;
-    else      prev[0] = 1;
+    // base case
+    if (nums[0] == 0) {
+        prev[0] = 2;
+    } else {
+        prev[0] = 1;
 
-    if (nums[0] != 0 && nums[0] <= targetSum)     prev[nums[0]] = 1;
+        if (nums[0] <= targetSum) {
+            prev[nums[0]] = 1;
+        }
+    }
 
     for (int i = 1; i < n; i++) {
-        vector<int> cur(targetSum + 1, 0);
+        vector<int> curr(targetSum + 1, 0);
         for (int sum = 0; sum <= targetSum; sum++) {
-            int notPicked = prev[sum];
-            int picked = 0;
-            if (nums[i] <= sum)
-                picked = prev[sum - nums[i]];
-            cur[sum] = (notPicked + picked) % mod;
+            int notTake = prev[sum];
+
+            int take = 0;
+            if (nums[i] <= sum) {
+                take = prev[sum - nums[i]];
+            }
+            curr[sum] = (notTake + take) % mod;
         }
-        prev = cur;
+        prev = curr;
     }
     return prev[targetSum];
 }
-
-int targetSumWays(int n, int target, vector<int>& nums) {
-    int totalSum = accumulate(nums.begin(), nums.end(), 0);
-    if (totalSum < target || (totalSum - target) % 2 != 0)
-        return 0;
-    return calculateWays(nums, (totalSum - target) / 2);
-}
-
