@@ -32,18 +32,17 @@ Complexity Analysis:
 
 // Memoization
 bool fmemo(int i, int sum, vector<int>& arr, vector<vector<int>>& dp) {
-    if (sum == 0)
-        return true;
+    if (sum == 0) return true;
 
-    if (dp[i][sum] != -1)
-        return dp[i][sum];
+    if (dp[i][sum] != -1) return dp[i][sum];
 
-    if (i == 0)
-        return dp[i][sum] = (sum == arr[i]);
-
+    if(i == 0){
+        if(sum == arr[0]) return true;
+        return false;
+    }
+    
     bool t = false;
-    if (arr[i] <= sum)
-        t = fmemo(i - 1, sum - arr[i], arr, dp);
+    if (arr[i] <= sum) t = fmemo(i - 1, sum - arr[i], arr, dp);
 
     bool nt = fmemo(i - 1, sum, arr, dp);
 
@@ -60,11 +59,13 @@ bool ftab(int n, int tar, vector<int>& arr){
                 continue;
             }
             if(i==0){
-                dp[i][sum] = (sum==arr[i]);
+                if(sum == arr[0]) dp[0][sum] = true;
+                else dp[0][sum] = false;
                 continue;
             }
             bool t = false;
             if(arr[i] <= sum) t = dp[i-1][sum-arr[i]];
+            
             bool nt = dp[i-1][sum];
             dp[i][sum] = (t || nt);
         }
@@ -99,6 +100,5 @@ bool fopt(int n, int tar, vector<int>& arr){
 bool isSubsetSum(vector<int> arr, int sum) {
     int n = arr.size();
     vector<vector<int>> dp(n, vector<int>(sum + 1, -1));
-
     return fmemo(n - 1, sum, arr, dp);
 }
