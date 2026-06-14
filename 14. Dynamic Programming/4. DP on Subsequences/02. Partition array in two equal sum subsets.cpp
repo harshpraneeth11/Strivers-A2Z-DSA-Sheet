@@ -28,21 +28,14 @@ CODE:
 */
 // Memoization
 bool fmemo(int i, int sum, vector<int>& arr, vector<vector<int>>& dp) {
-    if (sum == 0)
-        return true;
-
-    if (dp[i][sum] != -1)
-        return dp[i][sum];
-
-    if (i == 0)
-        return dp[i][sum] = (sum == arr[i]);
+    if (sum == 0) return true;
+    if (dp[i][sum] != -1) return dp[i][sum];
+    if (i == 0) return dp[i][sum] = (sum == arr[i]);
 
     bool t = false;
-    if (arr[i] <= sum)
-        t = fmemo(i - 1, sum - arr[i], arr, dp);
-
+    if (arr[i] <= sum) t = fmemo(i - 1, sum - arr[i], arr, dp);
+  
     bool nt = fmemo(i - 1, sum, arr, dp);
-
     return dp[i][sum] = (t || nt);
 }
 
