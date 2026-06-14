@@ -37,7 +37,7 @@ int fmemo(int i, int j, int n, vector<vector<int>>& tri, vector<vector<int>>& dp
     if (i == n - 1)
         return dp[i][j] = tri[i][j];
 
-    int a = fmemo(i + 1, j, n, tri, dp);
+    int a = fmemo(i + 1, j, n, tri, dp);   // In prev question. we wrote i-1, here i+1
     int b = fmemo(i + 1, j + 1, n, tri, dp);
     return dp[i][j] = min(a, b) + tri[i][j];
 }
