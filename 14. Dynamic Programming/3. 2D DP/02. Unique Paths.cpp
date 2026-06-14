@@ -47,7 +47,7 @@ int ftab(int m, int n){
         for(int j=0; j<n; j++){
             if(i==0 && j==0) continue;
             int top = 0, left = 0;
-            if(i-1>=0) top = top = dp[i-1][j];
+            if(i-1>=0) top = dp[i-1][j];
             if(j-1>=0) left = dp[i][j-1];
             dp[i][j] = top+left;
         }
@@ -65,7 +65,7 @@ int fopt(int m, int n){
         for(int j=0; j<n; j++){
             if(i==0 && j==0) continue;
             int top = 0, left = 0;
-            if(i-1>=0) top = top = prev[j];
+            if(i-1>=0) top = prev[j];
             if(j-1>=0) left = curr[j-1];
             curr[j] = top+left;
         }
