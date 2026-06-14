@@ -36,7 +36,7 @@ const int mod = 1e9 + 7;
 // Memoization
 int fmemo(int i, int tar, int arr[], vector<vector<int>>& dp){
     if(i == 0){
-        if(tar == 0 && arr[i] == 0) return dp[i][tar] = 2;
+        if(tar == 0 && arr[i] == 0) return dp[i][tar] = 2;       // Important
         if(tar == 0) return dp[i][tar] = 1;
         return dp[i][tar] = (arr[i] == tar);
     }
@@ -55,9 +55,9 @@ int ftab(int n, int sum, int arr[]){
     for(int i=0; i<n; i++){
         for(int tar=0; tar<=sum; tar++){
             if(i==0){
-                if(tar==0 && arr[i]==0) dp[i][tar] = 2;
+                if(tar==0 && arr[i]==0) dp[i][tar] = 2;             // Important
                 else if(tar==0) dp[i][tar] = 1;
-                else dp[i][tar] =  (arr[i]==tar);
+                else dp[i][tar] = (arr[i]==tar);
                 continue;
             }
             int take = 0;
