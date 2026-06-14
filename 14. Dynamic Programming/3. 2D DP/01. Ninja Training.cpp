@@ -78,7 +78,7 @@ int ftab(int n, vector<vector<int>>& points) {
         for (int j = 0; j < 3; j++) {
             for (int k = 0; k < 3; k++) {
                 if (j != k) {
-                    dp[i][j] = max(dp[i][j], points[i][j] + dp[i - 1][k]);
+                    dp[i][j] = max(dp[i][j], points[i][j] + dp[i - 1][k]);    // There are 6 ways
                 }
             }
         }
