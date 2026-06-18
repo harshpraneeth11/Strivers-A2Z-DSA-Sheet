@@ -25,6 +25,7 @@ COMPLEXITY ANALYSIS:
 CODE:
 */
 
+// From the start
 int maxProfit(vector<int>& prices) {
     int minprice = prices[0];
     int ans = 0;
@@ -32,5 +33,19 @@ int maxProfit(vector<int>& prices) {
         ans = max(ans, prices[i] - minprice);
         minprice = min(minprice, prices[i]);
     }
+    return ans;
+}
+
+
+// From the end
+int maxProfit(vector<int>& prices) {
+    int maxPrice = prices.back();
+    int ans = 0;
+
+    for(int i = prices.size() - 2; i >= 0; i--) {
+        ans = max(ans, maxPrice - prices[i]);
+        maxPrice = max(maxPrice, prices[i]);
+    }
+
     return ans;
 }
