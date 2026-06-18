@@ -50,6 +50,12 @@ int fmemo(int i, int tar, vector<int>& arr, vector<vector<int>>& dp){
     return dp[i][tar] = (take + notake);
 }
 
+int change(int amount, vector<int>& coins) {
+    int n = coins.size();
+    vector<vector<int>> dp(n, vector<int>(amount + 1, -1));
+    return fmemo(n - 1, amount, coins, dp);
+}
+
 // Tabulation
  int ftab(int n, int amount, vector<int>& arr){
     vector<vector<int>> dp(n,vector<int>(amount+1));
@@ -90,8 +96,4 @@ int fopt(int n, int amount, vector<int>& arr){
     return prev[amount];
 }
 
-int change(int amount, vector<int>& coins) {
-    int n = coins.size();
-    vector<vector<int>> dp(n, vector<int>(amount + 1, -1));
-    return fmemo(n - 1, amount, coins, dp);
-}
+
