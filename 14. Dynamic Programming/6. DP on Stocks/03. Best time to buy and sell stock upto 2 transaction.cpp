@@ -30,6 +30,56 @@ CODE:
 
 // Refer to problem 04 for explanation
 
+// _____________________________________________________________________________
+
+/* Most optimized in O(1) SC
+
+buy1 = max of all -p         or min abs value
+sell1 = max of all -p1+p2    p1 is min abs value and p2 is curr value
+buy2 = max of that prev transaction + min abs value of curr
+sell2 = max of prev transaction + max of curr transaction
+
+buy1 = buy2 and sell1 = sell2 if there is no 2nd transaction that is giving profit
+and ignore buy1, sell1 will give the 2nd transaction limits and buy2, sell2 gives total value
+
+prices = [3,3,5,0,0,3,1,4]
+
+buy1  sell1  buy2  sell2
+------------------------
+-3      0     -3     0
+-3      0     -3     0
+-3      2     -3     2
+ 0      2      2     2
+ 0      2      2     2
+ 0      3      2     5
+ 0      3      2     5
+ 0      4      2     6
+ 
+*/
+
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+
+        int buy1 = INT_MIN;
+        int sell1 = 0;
+
+        int buy2 = INT_MIN;
+        int sell2 = 0;
+
+        for (int p : prices) {
+            buy1 = max(buy1, -p);
+            sell1 = max(sell1, buy1 + p);
+
+            buy2 = max(buy2, sell1 - p);
+            sell2 = max(sell2, buy2 + p);
+        }
+
+        return sell2;
+    }
+};
+// _______________________________________________________
+
 int getAns(vector<int>& Arr, int n, int ind, int buy, int cap, vector<vector<vector<int>>>& dp) {
     // Base case: If we reach the end of the array or run out of allowed transactions, return 0.
     if (ind == n || cap == 0)
