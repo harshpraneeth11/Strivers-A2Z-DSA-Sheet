@@ -30,47 +30,52 @@ APPROACH:-
 
 To find the next permutation of an array, we can follow these steps:
 
-1. Find the first index `i` from the right such that `nums[i] < nums[i+1]`. This is the first element 
-that needs to be swapped.
-2. Find the first index `j` from the right such that `nums[j] > nums[i]`. This is the element that will 
-replace `nums[i]`.
-3. Swap `nums[i]` and `nums[j]`.
-4. Reverse the subarray starting from `i+1` till the end of the array.
-5. If step 1 does not find any index `i`, it means the array is in descending order. In that case, 
-reverse the entire array to get the lowest possible order.
+Step 1: Find the Breakpoint
+Traverse from right to left and find the first position where:
+nums[i] < nums[i+1]
 
+Because everything to the right of that point is already in descending order, meaning it's the largest arrangement possible for that suffix.
+
+Step 2: Find the Next Greater Element
+Find the first index j from the right such that:
+nums[j] > nums[i]
+
+Step 3: Swap nums[i] and nums[j].
+
+Step 4: Reverse the suffix (i+1 ... n-1).
 */
 
 // CODE:
 
-void nextPermutation(vector<int> &nums)
-{
+class Solution {
+public:
+    void nextPermutation(vector<int>& nums) {
+        int n = nums.size();
 
-    int bp = -1;
-    // finding the break point
-    for (int i = nums.size() - 2; i >= 0; i--)
-    {
-        if (nums[i] < nums[i + 1])
-        {
-            bp = i;
-            break;
-        }
-    }
-    // first greater element from back
-    if (bp != -1)
-    {
-        for (int i = nums.size() - 1; i >= 0; i--)
-        {
-            if (nums[i] > nums[bp])
-            {
-                swap(nums[i], nums[bp]);
+        // Step 1: Find breakpoint
+        int ind = -1;
+        for (int i = n - 2; i >= 0; i--) {
+            if (nums[i] < nums[i + 1]) {
+                ind = i;
                 break;
             }
         }
-    }
-    // reverse the array from bp+1 to end
-    reverse(nums.begin() + bp + 1, nums.end());
-}
 
-// TIME COMPLEXITY: O(n), where n is the size of the input array.
-// SPACE COMPLEXITY: O(1)
+        // If no breakpoint, reverse entire array
+        if (ind == -1) {
+            reverse(nums.begin(), nums.end());
+            return;
+        }
+
+        // Step 2: Find next greater element from right
+        for (int i = n - 1; i > ind; i--) {
+            if (nums[i] > nums[ind]) {
+                swap(nums[i], nums[ind]);
+                break;
+            }
+        }
+
+        // Step 3: Reverse the suffix
+        reverse(nums.begin() + ind + 1, nums.end());
+    }
+};
