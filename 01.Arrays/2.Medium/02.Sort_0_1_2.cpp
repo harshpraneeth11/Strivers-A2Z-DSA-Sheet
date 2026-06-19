@@ -32,17 +32,39 @@ At the end of the algorithm, the array will be sorted in the desired order.
 */
 
 // CODE:-
-void sortColors(vector<int> &nums) {
-    int low = 0, mid = 0, high = nums.size() - 1;
+Dutch National Flag Algorithm.
+
+Time Complexity : O(n)
+Space Complexity : O(1)
+
+void sortColors(vector<int>& nums) {
+    int low = 0, mid = 0;
+    int high = nums.size() - 1;
+
     while (mid <= high) {
-        if (nums[mid] == 0)
-            swap(nums[mid++], nums[low++]);
-        else if (nums[mid] == 1)
+        if (nums[mid] == 0) {
+            swap(nums[low], nums[mid]);
+            low++;
             mid++;
-        else
-            swap(nums[mid], nums[high--]);
+        }
+        else if (nums[mid] == 1) {
+            mid++;
+        }
+        else { // nums[mid] == 2
+            swap(nums[mid], nums[high]);
+            high--;
+        }
     }
 }
 
-// TIME COMPLEXITY = O(N)
-// SPACE COMPLEXITY = O(0)
+Idea
+low → next position for 0  // low-1 is last 0
+mid → current element being processed   // mid-1 is last 1 or 0, if no 1's
+high → next position for 2  // high+1 is first 2
+
+Maintain:
+
+[0 ... low-1]      => all 0s
+[low ... mid-1]    => all 1s
+[mid ... high]     => unknown
+[high+1 ... n-1]   => all 2s
