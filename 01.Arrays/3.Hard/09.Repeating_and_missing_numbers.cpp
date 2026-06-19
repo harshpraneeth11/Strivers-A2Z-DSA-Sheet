@@ -60,6 +60,15 @@ SPACE COMPLEXITY: O(1).
 */
 _____________________________________________________________
 
+Step 1: XOR all array elements and numbers from 1 to n
+xr = (a[0] ^ a[1] ^ ... ^ a[n-1]) ^ (1 ^ 2 ^ ... ^ n)
+All common numbers cancel out: xr = X ^ Y
+
+Step 2: Find a set bit
+int bitNo = xr & -xr;           // 2's complement
+int bitNo = xr & ~(xr - 1);     // both are same
+This gives the rightmost set bit where X and Y differ.
+
 XOR approach ) TC : O(N) and SC : O(1)
 
 XOR all elements and numbers from 1 to n to get xr = X ^ Y.
