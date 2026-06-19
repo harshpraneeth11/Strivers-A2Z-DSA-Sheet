@@ -14,6 +14,38 @@ Radix sort
 Bucket sort
 Heap sort
 
+// _____________________________________________________________
+
+selection sort :  does not have any recursive approach - select the min and place here
+bubble sort : keep the max element at the right most and again call for first n-1 elements
+insertion sort : solve first n-1 and then insert last element in correct position
+mergesort(total) : mergesort(left), mergesort(right), merge()
+quicksort(total) : partition(), quicksort(leftP), quicksort(rightP) - i = low-1 and till i the array is less than arr[p]
+
+Bubble / selection : first the last element is kept in its correct place
+Insertion : first the left most element is kept in its correct place
+
+Selection : O(n^2) in all and not stable
+Bubble / Insertion : O(n) in best, O(n^2) in average and worst and stable
+Merge : O(nlogn) in all and stable
+Quick : O(nlogn) in best and average, O(n^2) in worst case (bad pivot) and not stable 
+
+MergeSort : 
+n
+n/2 + n/2
+n/4 + n/4 + n/4 + n/4
+it happens logn times : so nlogn
+
+Quicksort : in bad pivot case, n + n-1 + n-2 + ... gives O(n^2
+In best case, pivot splits array roughly in half every time
+n → n/2 + n/2  
+n/2 → n/4 + n/4  
+...
+and it happens logn times - 
+// _____________________________________________________________
+
+
+
 Selection Sort
 /*
 Start with the first element as the current position.
