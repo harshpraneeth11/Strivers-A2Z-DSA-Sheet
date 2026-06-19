@@ -14,42 +14,51 @@ Notice that the order of the output and the order of the triplets does not matte
 */
 
 /*
-APPROACH:
-To find all triplets that sum up to zero, we can follow these steps:
-1. Sort the input array in non-decreasing order.
-2. Iterate through the array and fix the first element as nums[k] (where k = 0 to n-1).
-3. Use two pointers (i and j) to find the other two elements such that nums[i] + nums[j] = -nums[k].
-4. Move the pointers accordingly to find all possible triplets.
-5. Skip duplicate elements to avoid duplicate triplets.
-6. Return the resulting triplets.
 */
 
-vector<vector<int>> threeSum(vector<int>& nums) {
-    vector<vector<int>> res;
-    sort(nums.begin(), nums.end());
+class Solution {
+public:
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        sort(nums.begin(), nums.end());
+        int n = nums.size();
+        vector<vector<int>> ans;
 
-    for (int k = 0; k < nums.size(); ++k) {
-        if (k > 0 && nums[k] == nums[k - 1]) continue; // Skip duplicates for k
+        for(int i = 0; i < n; i++) {
 
-        int target = -nums[k], i = k + 1, j = nums.size() - 1;
+            // skip duplicates for i. There is no answer possible with the first 2, so we jumped to the next one
+            // 2, 2, ....
+            // If there is any possibility, we already jumped l++ in the sum==0 case
+            if(i > 0 && nums[i] == nums[i - 1])
+                continue;
 
-        while (i < j) {
-            int sum = nums[i] + nums[j];
-            if (sum == target) {
-                res.push_back({nums[k], nums[i++], nums[j--]});
+            int l = i + 1;
+            int r = n - 1;
 
-                while (i < j && nums[i] == nums[i - 1]) ++i; // Skip duplicates
-                while (i < j && nums[j] == nums[j + 1]) --j;
-            } else if (sum < target) {
-                ++i;
-            } else {
-                --j;
+            while(l < r) {
+                long long sum = (long long)nums[i] + nums[l] + nums[r];
+
+                if(sum == 0) {
+                    ans.push_back({nums[i], nums[l], nums[r]});
+
+                    l++;
+                    r--;
+
+                    // skip duplicates, don't this at start as 2 numbers can be from this duplicate like 2, 2, -4.
+                    while(l < r && nums[l] == nums[l - 1]) l++;
+                    while(l < r && nums[r] == nums[r + 1]) r--;
+                }
+                else if(sum < 0) {
+                    l++;
+                }
+                else {
+                    r--;
+                }
             }
         }
-    }
 
-    return res;
-}
+        return ans;
+    }
+};
 
 /*
 TIME COMPLEXITY: O(n^2), where n is the size of the input array.
