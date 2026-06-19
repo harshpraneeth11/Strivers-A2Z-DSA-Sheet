@@ -29,6 +29,9 @@ Repeat steps 3-5 until the end of the array is reached.
 The array will now be rearranged such that every consecutive pair of integers have opposite signs.
 */
 
+// TIME COMPLEXITY = O(N)
+// SPACE COMPLEXITY = O(N)
+
 // CODE:-
 vector<int> rearrangeArray(vector<int> &nums) {
     int i = 0; // for +ve integers
