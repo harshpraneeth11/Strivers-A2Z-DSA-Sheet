@@ -20,7 +20,13 @@ All possible cases :-
 5) Multiple zeros (e.g. [0, -2, 0, -3, 0])
 
 CODE:*/
+/*
+For maximum sum: negative number → bad
+For product: negative X negative = positive
+So a negative product today may become the maximum product tomorrow.
 
+If there is a 0, we can start the product again from the next element onwards
+*/    
 class Solution {
 public:
     int maxProduct(vector<int>& A) {
@@ -38,29 +44,34 @@ public:
 
 // ________________________________________
 
-// 0 .....   0 1...5.... 9...0   ......
-// left to right makes portion from 1 to 5 covered and right to left makes portion from 9 to 5 covered
+/*
+In a segment with odd negatives:
+Total product is negative. To maximize it, we must drop exactly one “side effect” of a negative.
+So only two choices matter:
+Remove prefix up to first negative (keep right part)
+Remove suffix after last negative (keep left part)
+*/
 
 int maxProduct(vector<int>& nums) {
     int ans = INT_MIN;
-    int prdct = 1;
+    int prod = 1;
 
     // Iterate from left to right
     for (int i = 0; i < nums.size(); i++) {
-        prdct = prdct * nums[i];
-        ans = max(ans, prdct);
-        if (prdct == 0)
-            prdct = 1;
+        prod = prod * nums[i];
+        ans = max(ans, prod);
+        if (prod == 0)
+            prod = 1;
     }
 
-    prdct = 1;
+    prod = 1;
 
     // Iterate from right to left
     for (int i = nums.size() - 1; i >= 0; i--) {
-        prdct = prdct * nums[i];
-        ans = max(ans, prdct);
-        if (prdct == 0)
-            prdct = 1;
+        prod = prod * nums[i];
+        ans = max(ans, prod);
+        if (prod == 0)
+            prod = 1;
     }
 
     return ans;
