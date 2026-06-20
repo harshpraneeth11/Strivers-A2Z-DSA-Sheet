@@ -25,21 +25,54 @@ Complexity Analysis:
 Code:
 */
 
-bool comp(vector<int>& a, vector<int>& b) {
-    return a[1] < b[1];
-}
+class Solution {
+public:
+    int eraseOverlapIntervals(vector<vector<int>>& intervals) {
+        sort(intervals.begin(), intervals.end());
 
-int eraseOverlapIntervals(vector<vector<int>>& intervals) {
-    if(intervals.size() < 2) return 0;
-    sort(intervals.begin(), intervals.end(), comp);
-    int cnt = 0, end = intervals[0][1];
-    for(int i = 1; i < intervals.size(); i++) {
-        if(intervals[i][0] < end) {
-            cnt++;
+        int remove = 0;
+        int prevEnd = intervals[0][1];
+
+        for(int i = 1; i < intervals.size(); i++) {
+            if(intervals[i][0] < prevEnd) {  // overlap
+                remove++;
+
+                // keep the interval with smaller end
+                // If there is a overlap, we remove either before or current
+                prevEnd = min(prevEnd, intervals[i][1]);        
+                // This line is not needed in end time sorting approach
+            }
+            else {
+                prevEnd = intervals[i][1];
+            }
         }
-        else {
-            end = intervals[i][1];
-        }
+
+        return remove;
     }
-    return cnt;
-}
+};
+
+
+
+class Solution {
+public:
+    static bool cmp(vector<int>& a, vector<int>& b) {
+        return a[1] < b[1];
+    }
+
+    int eraseOverlapIntervals(vector<vector<int>>& intervals) {
+        sort(intervals.begin(), intervals.end(), cmp);
+
+        int remove = 0;
+        int prevEnd = intervals[0][1];
+
+        for (int i = 1; i < intervals.size(); i++) {
+            if (intervals[i][0] < prevEnd) {
+                remove++;
+            } else {
+                prevEnd = intervals[i][1];
+            }
+        }
+
+        return remove;
+    }
+};
