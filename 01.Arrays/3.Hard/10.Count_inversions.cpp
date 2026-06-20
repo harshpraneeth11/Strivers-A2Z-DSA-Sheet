@@ -21,6 +21,9 @@ To find the inversion count in the array, we can utilize the merge sort algorith
 CODE:
 */
 
+inv_cnt += leftsize - i;         _ _ _ _ | i _ _ _     _ _ j _ _ _ _ 
+There are i elements before the partition,and n1-i after the partition, so add n1-i to inversion count
+
 long long int inv_cnt = 0;
 
 long long int merge(long long start, long long mid, long long end, long long arr[]) {
@@ -38,7 +41,7 @@ long long int merge(long long start, long long mid, long long end, long long arr
     long long i = 0, j = 0, k = start;
     while (i < leftsize && j < rightsize) {
         if (left[i] > right[j]) {
-            inv_cnt += leftsize - i;
+            inv_cnt += leftsize - i;            // Important line
             arr[k++] = right[j++];
         } else {
             arr[k++] = left[i++];
