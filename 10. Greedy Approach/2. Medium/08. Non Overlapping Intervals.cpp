@@ -25,6 +25,8 @@ Complexity Analysis:
 Code:
 */
 
+Here, end points are not considered as overlapping
+
 class Solution {
 public:
     int eraseOverlapIntervals(vector<vector<int>>& intervals) {
