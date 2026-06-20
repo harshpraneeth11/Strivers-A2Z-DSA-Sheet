@@ -29,26 +29,36 @@ Complexity Analysis:
 Code:
 */
 
-vector<vector<int>> insert(vector<vector<int>>& intervals, vector<int>& newInterval) {
-    vector<vector<int>> ans;
-    int n = intervals.size();
+In this question, end points are not considered as overlapping
 
-    for(int i = 0; i < n; i++) {
-        // newInterval is after the current interval
-        if(intervals[i][1] < newInterval[0]) {
+class Solution {
+public:
+    vector<vector<int>> insert(vector<vector<int>>& intervals, vector<int>& newInterval) {
+        vector<vector<int>> ans;
+        int i = 0;
+        int n = intervals.size();
+
+        // Add all intervals completely before newInterval
+        while (i < n && intervals[i][1] < newInterval[0]) {
             ans.push_back(intervals[i]);
+            i++;
         }
-        // newInterval is before the current interval
-        else if(newInterval[1] < intervals[i][0]) {
-            ans.push_back(newInterval);
-            newInterval = intervals[i];
+
+        // Merge overlapping intervals
+        while (i < n && intervals[i][0] <= newInterval[1]) {
+            newInterval[0] = min(newInterval[0], intervals[i][0]);
+            newInterval[1] = max(newInterval[1], intervals[i][1]);
+            i++;
         }
-        // newInterval overlaps with the current interval
-        else {
-            newInterval[0] = min(intervals[i][0], newInterval[0]);
-            newInterval[1] = max(intervals[i][1], newInterval[1]);
+
+        ans.push_back(newInterval);
+
+        // Add remaining intervals
+        while (i < n) {
+            ans.push_back(intervals[i]);
+            i++;
         }
+
+        return ans;
     }
-    ans.push_back(newInterval);
-    return ans;
-}
+};
