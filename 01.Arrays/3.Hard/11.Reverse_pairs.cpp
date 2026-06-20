@@ -32,62 +32,76 @@ In the last problem, we do directly left_size-i directly, but here it is not pos
 As the comparison we are doing is left[i] <> right[i], but we are supposed to do left[i] <> 2 * right[i]
 */
 
-int rev_pair = 0;
+#include <bits/stdc++.h>
+using namespace std;
 
-void merge(int start, int mid, int end, vector<int>& nums){
-    int left_size = mid - start + 1;
-    int right_size = end - mid;
-    vector<int> left(left_size);
-    vector<int> right(right_size);
+class Solution {
+public:
+    int merge(vector<int>& nums, int start, int mid, int end) {
+        int left_size = mid - start + 1;
+        int right_size = end - mid;
 
-    for(int i = 0; i < left_size; i++){
-        left[i] = nums[start + i];
-    }
-    for(int i = 0; i < right_size; i++){
-        right[i] = nums[mid + 1 + i];
-    }
+        vector<int> left(left_size);
+        vector<int> right(right_size);
 
-    // main logic resides here - seperate code unlike the prev problem
-    int m = 0;
-    for(int i = 0; i < left_size; i++){
-        while(m < right_size && left[i] > (long long)2 * right[m]){
-            m++;
+        for (int i = 0; i < left_size; i++) {
+            left[i] = nums[start + i];
         }
-        rev_pair += m;
-    }
-
-    int i = 0, j = 0, k = start;
-    while(i < left_size && j < right_size){
-        if(left[i] > right[j]){
-            nums[k++] = right[j++];
+        for (int i = 0; i < right_size; i++) {
+            right[i] = nums[mid + 1 + i];
         }
-        else{
+
+        // count reverse pairs
+        int count = 0;
+        int j = 0;
+
+        for (int i = 0; i < left_size; i++) {
+            while (j < right_size && (long long)left[i] > 2LL * right[j]) {
+                j++;
+            }
+            count += j;
+        }
+
+        // merge step
+        int i = 0;
+        j = 0;
+        int k = start;
+
+        while (i < left_size && j < right_size) {
+            if (left[i] <= right[j]) {
+                nums[k++] = left[i++];
+            } else {
+                nums[k++] = right[j++];
+            }
+        }
+
+        while (i < left_size) {
             nums[k++] = left[i++];
         }
-    }
-    while(i < left_size){
-        nums[k++] = left[i++];
-    }
-    while(j < right_size){
-        nums[k++] = right[j++];
-    }
-}
 
-void mergesort(int start, int end, vector<int>& nums){
-    if(start >= end)
-        return;
-    int mid = start + (end - start) / 2;
-    mergesort(start, mid, nums);
-    mergesort(mid + 1, end, nums);
-    merge(start, mid, end, nums);
-}
+        while (j < right_size) {
+            nums[k++] = right[j++];
+        }
 
-int reversePairs(vector<int>& nums) {
-    rev_pair = 0;
-    mergesort(0, nums.size() - 1, nums);
-    return rev_pair;
-}
+        return count;
+    }
 
+    int mergesort(vector<int>& nums, int start, int end) {
+        if (start >= end) return 0;
+
+        int mid = start + (end - start) / 2;
+
+        int left = mergesort(nums, start, mid);
+        int right = mergesort(nums, mid + 1, end);
+        int cross = merge(nums, start, mid, end);
+
+        return left + right + cross;
+    }
+
+    int reversePairs(vector<int>& nums) {
+        return mergesort(nums, 0, nums.size() - 1);
+    }
+};
 /*
 TIME COMPLEXITY: O(n log n), where n is the size of the array.
 SPACE COMPLEXITY: O(n), where n is the size of the array.
