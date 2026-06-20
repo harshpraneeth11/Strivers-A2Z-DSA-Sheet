@@ -49,6 +49,11 @@ TC : O(r*r)
 
 */
 
+why nCr ?
+T(n, r) = T(n-1, r-1) + T(n-1, r)
+n C r = n-1 C r-1 + n-1 C r            is famous formulae
+They don't dig too much
+
 Variation 1 :
 
 int nCr(int n, int r) {
