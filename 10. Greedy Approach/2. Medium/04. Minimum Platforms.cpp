@@ -30,6 +30,8 @@ Complexity Analysis:
 Code:
 */
 
+Plat can not be -ve ever because, if dep[j] > arr[i], then we do j++, so 
+
 int findPlatform(int arr[], int dep[], int n)
 {
     sort(arr, arr + n);
@@ -37,6 +39,7 @@ int findPlatform(int arr[], int dep[], int n)
     int i = 0, j = 0, plat = 0, ans = 0;
     while (i < n) {
         if (arr[i] <= dep[j]) {
+          // The same platform cannot be used for both the departure of a train and the arrival of another train.
             i++;
             plat++;
             ans = max(ans, plat);
