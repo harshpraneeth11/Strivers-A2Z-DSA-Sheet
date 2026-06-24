@@ -18,21 +18,23 @@ Here is your **clean, interview-ready, neatly formatted Sliding Window cheat she
 ### Template:
 
 ```cpp
-int l = 0, r = 0;
 
-while (r < n) {
+If 1st step is not possible, after r=1 from r=0, l also changes to l=1 from l=0
+and suppose the possible answer is ans = 5, then for next step if not possible l++ and r++, so ans=5
+Only if it is valid, l is at same place and r++, so ans++
+No need to use return j-i
+
+int l = 0;
+
+for (int r = 0; r < n; r++) {
     // include arr[r]
 
-    if (r - l + 1 < k) {
-        r++;
-    }
-    else if (r - l + 1 == k) {
-        // process answer
-
+    if (window_invalid) {
         // remove arr[l]
         l++;
-        r++;
     }
+
+    ans = max(ans, r - l + 1);
 }
 ```
 
