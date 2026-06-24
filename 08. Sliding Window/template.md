@@ -209,27 +209,25 @@ Now, we check if the left most value in queue or the maximum
 is from the left most value in current window, then we remove the left most
 in queue and do l++
 
-deque<int> dq;
-int l = 0;
+deque<int> dq;   // stores indices, not values.
+// Else it is problamtic to pop rom front, if there are duplicates. If no duplicates, then no problem.
 
-for (int r = 0; r < n; r++) {
+for (int i = 0; i < nums.size(); i++) {
 
-    // maintain monotonic decreasing deque
-    while (!dq.empty() && dq.back() < arr[r])
+    // 1. Remove indices outside the window
+    while (!dq.empty() && dq.front() <= i - k)
+        dq.pop_front();
+
+    // 2. Remove smaller elements from the back
+    while (!dq.empty() && nums[dq.back()] <= nums[i])
         dq.pop_back();
 
-    dq.push_back(arr[r]);
+    // 3. Add current index
+    dq.push_back(i);
 
-    if (r - l + 1 == k) {
-
-        // answer is front of deque
-        ans.push_back(dq.front());
-
-        // remove left element if it leaves window
-        if (dq.front() == arr[l])
-            dq.pop_front();
-
-        l++;
+    // 4. Process answer when window is formed
+    if (i >= k - 1) {
+        // Maximum = nums[dq.front()]
     }
 }
 ```
